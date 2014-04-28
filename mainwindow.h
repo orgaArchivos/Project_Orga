@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "qmessagebox.h"
 
 namespace Ui {
 class MainWindow;
@@ -22,6 +23,7 @@ private:
 private slots:
 
     void crearTabla();
+    void clickElemento();
 
     void on_pushButton_clicked();
 };
