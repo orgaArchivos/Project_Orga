@@ -19,7 +19,7 @@ void MainWindow::crearTabla()
 {
     ui->listWidget->addItem("algo");
 
-    connect(ui->listWidget, SIGNAL(itemClicked(QListWidgetItem*)),
+    connect(ui->listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
                 this, SLOT(clickElemento()));
 }
 

@@ -119,7 +119,6 @@
      <string>Archivo</string>
     </property>
     <addaction name="actionAbrir_Archivo"/>
-    <addaction name="actionAbrir_Tabla"/>
     <addaction name="actionNuevo_Archivo"/>
    </widget>
    <widget class="QMenu" name="menuCrear">
