@@ -24,11 +24,11 @@
       <x>210</x>
       <y>20</y>
       <width>811</width>
-      <height>421</height>
+      <height>431</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -91,7 +91,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="btnCerrar">
     <property name="geometry">
      <rect>
       <x>940</x>
@@ -102,6 +102,26 @@
     </property>
     <property name="text">
      <string>Cerrar</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="statusLabel">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>530</y>
+      <width>931</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>9</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>
@@ -120,6 +140,9 @@
     </property>
     <addaction name="actionAbrir_Archivo"/>
     <addaction name="actionNuevo_Archivo"/>
+    <addaction name="actionGuardar"/>
+    <addaction name="actionCerrar_Archivo"/>
+    <addaction name="actionSalir"/>
    </widget>
    <widget class="QMenu" name="menuCrear">
     <property name="title">
@@ -169,6 +192,21 @@
   <action name="actionNuevo_Archivo">
    <property name="text">
     <string>Nuevo Archivo</string>
+   </property>
+  </action>
+  <action name="actionCerrar_Archivo">
+   <property name="text">
+    <string>Cerrar Archivo</string>
+   </property>
+  </action>
+  <action name="actionGuardar">
+   <property name="text">
+    <string>Guardar</string>
+   </property>
+  </action>
+  <action name="actionSalir">
+   <property name="text">
+    <string>Salir</string>
    </property>
   </action>
  </widget>
