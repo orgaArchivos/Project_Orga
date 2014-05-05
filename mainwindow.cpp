@@ -21,6 +21,16 @@ void MainWindow::crearTabla()
 
     connect(ui->listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
                 this, SLOT(clickElemento()));
+
+    QStandardItemModel* model = new QStandardItemModel(1,1,this);
+
+    //se hacen los encabezados de la tabla
+    model->setHorizontalHeaderItem(0,new QStandardItem(QString("Nombre")));
+    model->setHorizontalHeaderItem(1,new QStandardItem(QString("Tipo")));
+    model->setHorizontalHeaderItem(2,new QStandardItem(QString("Llave")));
+    model->setHorizontalHeaderItem(3,new QStandardItem(QString("Longitud")));
+    model->setHorizontalHeaderItem(4,new QStandardItem(QString("Decimales")));
+    ui->tableView->setModel(model);
 }
 
 
@@ -35,7 +45,7 @@ void MainWindow::clickElemento()
 void MainWindow::on_actionNuevo_Archivo_triggered()
 {
     fclose(this->archivo);
-        QString fileName = QFileDialog::getSaveFileName(this,tr("Guardar archivo"),QDir::currentPath(), tr("Documentos (*.gbd)") );
+        QString fileName = QFileDialog::getSaveFileName(this,tr("Guardar archivo"),QDir::currentPath(), tr("Archivos (*.gbd)") );
        if(!fileName.isEmpty()){
 
           this->path = fileName;
@@ -44,6 +54,7 @@ void MainWindow::on_actionNuevo_Archivo_triggered()
                 if( archivo!= NULL){
                     QMessageBox::information(this,"Correcto","Archivo creado y abierto correctamente");
                     this->ui->statusLabel->setText(this->path);
+                    this->ui->menuCrear->setEnabled(true);
                 }else{
                     QMessageBox::critical(this,"Error","Error al abrir el archivo creado");
                 }
@@ -64,9 +75,7 @@ void MainWindow::on_actionAbrir_Archivo_triggered()
        case QMessageBox::Yes:
     {
         fclose(archivo);
-       // QFileDialog::getOpenFileName( this, tr("Abrir Archivo"), QDir::currentPath(), tr("Document files(*.gbd)", 0, QFileDialog::DontUseNativeDialog ));
-
-         QString filename = QFileDialog::getOpenFileName(this, tr("Open Document"), QDir::currentPath(),  tr("Document files (*.gbd)") );
+         QString filename = QFileDialog::getOpenFileName(this, tr("Abrir archivo"), QDir::currentPath(),  tr("Archivos (*.gbd)") );
          this->path = filename;
         if( !filename.isNull() )
          {
@@ -74,6 +83,7 @@ void MainWindow::on_actionAbrir_Archivo_triggered()
              if( archivo!= NULL){
                  QMessageBox::information(this,"Correcto","Archivo creado y abierto correctamente");
                  this->ui->statusLabel->setText(this->path);
+                 this->ui->menuCrear->setEnabled(true);
              }else{
                  QMessageBox::critical(this,"Error","Error al abrir el archivo creado");
              }
@@ -87,115 +97,6 @@ void MainWindow::on_actionAbrir_Archivo_triggered()
            // should never be reached
            break;
      }
-
-    /*  //Verica que este abierto, si es asi entonces cierra el archivo
-    if(this->fileRecord.isOpen()){
-        this->fileRecord.flush();
-        this->fileRecord.close();
-    }
-
-    //Obtiene la direccion del archivo que el usuario desea abrir
-    QString file = QFileDialog::getOpenFileName(this,"Abrir Archivo","","Archivos de Base de datos(*.jjdb)");
-
-    //Abre el archivo principal en modo de lectura y escritura
-    if(this->fileRecord.open(file.toStdString(),ios_base::in | ios_base::out)){
-
-        //Limpia el vector de campos, para que quede vacio
-        while(this->fileRecord.fieldsSize() != 0){
-            this->fileRecord.removeField(0);
-        }
-
-        //mueve el puntero de lectura al inicio
-        this->fileRecord.seekg(1,ios_base::beg);
-
-        //Lectura del header del archivo
-        char* tmp = new char[2];
-        stringstream ss;
-        int data_start = 0;
-
-        while(this->fileRecord.read(tmp,1) != NULL){
-            data_start++;
-            if(tmp[0] == '$' && data_start != 1){
-                break;
-            }else{
-                ss<<tmp[0];
-            }
-        }
-        data_start++;
-        this->fileRecord.setDataStart(data_start);
-
-        char* header = new char[ss.str().length() + 1];
-        strcpy(header,ss.str().c_str());
-
-        //Manda al metodo readHeader(char*) a que se encarge de cargar los campos
-        this->fileRecord.readHeader(header);
-
-        //Configura el tamanio de cada registro a partir de los campos creados
-        int rl = 0;
-        vector<Field*> fields = this->fileRecord.getFields();
-        for(int i = 0; i < fields.size(); i++){
-            rl += fields.at(i)->getLength();
-        }
-        this->fileRecord.setRecordLength(rl);
-
-        //Inicia la lectura del archivo de indices para cargarlos
-
-        //Modifica el nombre del archivo principal para cargar el de indices
-        QString str = file.insert(file.size()-5,"-indices");
-
-        //Abre el archivo de indices en modo de lectura y escritura
-        if(this->indicesFile.open(str.toStdString(),ios_base::in | ios_base::out)){
-            //mueve el puntero de lectura al final del archivo
-            this->indicesFile.seekg(0,ios_base::end);
-
-            //obtiene el tamanio del contenido leido para poder leerlo y cargarlo al programa
-            streamoff indexLength = this->indicesFile.tellg();
-
-            char* indexes = new char[indexLength+1];
-
-            //Se hace la lectura del archivo
-            this->indicesFile.seekg(0,ios_base::beg);
-            this->indicesFile.read(indexes,indexLength);
-
-            indexes[indexLength] = '\0';
-
-            //Se transforma en un QString para la mejor manipulacion
-            string str (indexes);
-            QString qstr = QString::fromStdString(str);
-
-            //hace una lista de cadenas despues de haberlas partido por ese caracter
-            QStringList list = qstr.split("/");
-
-            //itera la cantidad de indices primarios hayan en el archivo
-            for(int i = 0; i < list.size(); i++){
-                //vuelve a partir las cadenas para dejarlas de manera que se conviertan
-                //en los atributos de los indices
-                QStringList list2 = list.at(i).split(",");
-
-                //se crean los atributos del indice primario
-                string key = list2.at(0).toStdString();
-                streamoff offset = atoll(list2.at(1).toStdString().c_str());
-
-                //se crea el indice primario
-                PrimaryIndex* newIndex = new PrimaryIndex(key,offset);
-                this->fileRecord.insertIndex(key,newIndex);
-            }
-        }else{
-            QMessageBox::critical(this,"Error","Hubo un error al momento de cargar al archivo de indices");
-            return;
-        }
-
-        //verifica si todo esta bien
-        if(this->fileRecord.isOpen()){
-            QMessageBox::information(this,"Exitoso","Se han cargado los archivos correctamente");
-        }else{
-            QMessageBox::critical(this,"Error","Hubo un error al momento de cargar el archivo de registros");
-        }
-    }else{
-        QMessageBox::critical(this,"Error","Hubo un error al momento de abrir el archivo");
-    }*/
-
-
 }
 
 //Encargado de salvar todo el contenido que se ha escrito en los archivos
@@ -498,4 +399,9 @@ void MainWindow::on_actionCrear_Tabla_triggered()
 void MainWindow::on_btnCerrar_clicked()
 {
     this->close();
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+
 }

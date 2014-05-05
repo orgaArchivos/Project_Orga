@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="iconos.qrc">
-    <normaloff>:/iconos/access.ico</normaloff>:/iconos/access.ico</iconset>
+    <normaloff>:/iconos/Database 2.ico</normaloff>:/iconos/Database 2.ico</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QTabWidget" name="tabWidget">
@@ -28,7 +28,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -145,6 +145,9 @@
     <addaction name="actionSalir"/>
    </widget>
    <widget class="QMenu" name="menuCrear">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>Crear</string>
     </property>
@@ -165,6 +168,10 @@
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionCrear_Tabla">
+   <property name="icon">
+    <iconset resource="iconos.qrc">
+     <normaloff>:/iconos/Database 2.ico</normaloff>:/iconos/Database 2.ico</iconset>
+   </property>
    <property name="text">
     <string>Crear Tabla</string>
    </property>
