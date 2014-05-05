@@ -1,0 +1,13 @@
+Esta es la estructura de el proyecto y la explicación de cada clase en su orden:
+
+1. MASTERBLOQUE: Esta es la cabecera del archivo que nos contiene la información de el próximo espacio disponible en el archivo
+   y también el primer bloque de METADATA y el actual, en caso de haber más de uno.
+
+2. metaData: Este me da la información necesaria para saber cuales son los bloque de MDTBloque donde estoy trabajando,
+   asi como el nombre de la tabla y su dirección de la informacion de su estructura, lo que sería una dirección a su MDTBloque,
+   donde podría ver ya la dirección a donde está su DATA y su estructura.
+
+3. MDTBloque: Este es uno de los más importantes para una tabla, contiene su información estructural, se escribe por cada una de las
+   tablas, indicando y conteniendo en sí, su direccipn a su DATA, y conteniendo el vector de sus campos.
+
+4. DATABloque : Es la que contiene todos los registros de todas las tablas;

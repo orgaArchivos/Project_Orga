@@ -18,16 +18,21 @@ SOURCES += main.cpp\
     mdtbloque.cpp \
     databloque.cpp \
     migestor.cpp \
-    metadata.cpp
+    metadata.cpp \
+    campo.cpp
 
 HEADERS  += mainwindow.h \
     masterbloque.h \
     mdtbloque.h \
     databloque.h \
     migestor.h \
-    metadata.h
+    metadata.h \
+    campo.h
 
 FORMS    += mainwindow.ui
 
 RESOURCES += \
     iconos.qrc
+
+OTHER_FILES += \
+    Descripción-InformaciónGeneral.txt
