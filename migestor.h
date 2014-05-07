@@ -3,6 +3,23 @@
 #include <stdio.h>
 #include <iostream>
 #include <ctype.h>
+#include "masterbloque.h"
+#include "metadata.h"
+#include "databloque.h"
+#include <stdio.h>
+#include <iostream>
+#include <ctype.h>
+#include <QComboBox>
+#include <qdebug.h>
+#include <QMainWindow>
+#include <QDialog>
+#include <QFileDialog>
+#include <QString>
+#include <QMessageBox>
+#include <QInputDialog>
+#include <QLineEdit>
+#include <QStandardItemModel>
+#include <qpointer.h>
 
 using namespace std;
 
@@ -10,16 +27,16 @@ using namespace std;
 class miGestor
 {
 public:
-    void crearArchivo(FILE *ARCHIVO, char * byteArray);
-    void abrirArchivo(FILE *ARCHIVO, char * byteArray);
-    void leerMaterBloque(FILE *ARCHIVO, char * byteArray);
-    void escribirMasterBloque(FILE *ARCHIVO, char * byteArray);
-    void leermetaData(FILE *ARCHIVO, char * byteArray);
-    void escribirmetaData(FILE *ARCHIVO, char * byteArray);
-    void leerMDTBloque(FILE *ARCHIVO, char * byteArray);
-    void escribirMDTBloque(FILE *ARCHIVO, char * byteArray);
-    void leerdataBloque(FILE *ARCHIVO, char * byteArray);
-    void escribirdataBloque(FILE *ARCHIVO, char * byteArray);
+    bool crearArchivo(QString path);
+    bool abrirArchivo(QString path);
+    void leerMasterBloque(masterBloque master);
+    void escribirMasterBloque(masterBloque master);
+    void leermetaData(metaData metadata);
+    void escribirmetaData(metaData metadata);
+    void leerdataBloque(DATABloque data);
+    void escribirdataBloque(DATABloque data);
+
+    FILE *archivo;
 
     miGestor();
 };

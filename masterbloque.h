@@ -20,8 +20,8 @@ public:
     int primer_metadata;  //Dirección del primer bloque de METADATA
     int actual_metadata; //Dirección del bloque de METADATA actual (MDTBloque)
 
-    char * toBytes;    //Función que devuelve el CHAR* de bytes para ser escrito en el archivo
-    char * fromBytes;  //Usada para la lectura, hace lo inverso, convierte a Class los bytes
+   // setMasterBloque(masterBloque *nuevo);
+    masterBloque *getMasterBloque();
 
     masterBloque(int prox_libre,int primer_metadata,int actual_metadata);
 };

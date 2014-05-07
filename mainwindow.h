@@ -4,6 +4,7 @@
 #include "metadata.h"
 #include "databloque.h"
 #include "campo.h"
+#include "migestor.h"
 #include <stdio.h>
 #include <iostream>
 #include <ctype.h>
@@ -42,7 +43,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    FILE *archivo;
+    miGestor gestor;
     QString path;
 
 private slots:

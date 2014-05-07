@@ -37,27 +37,22 @@ void MainWindow::clickElemento()
 
 void MainWindow::on_actionNuevo_Archivo_triggered()
 {
-    fclose(this->archivo);
+    //fclose(this->archivo);
         QString fileName = QFileDialog::getSaveFileName(this,tr("Guardar archivo"),QDir::currentPath(), tr("Archivos (*.gbd)") );
        if(!fileName.isEmpty()){
 
           this->path = fileName;
-          this->archivo = fopen(path.toStdString().c_str(),"wb");
-
-                if( archivo!= NULL){
+          bool creado = this->gestor.crearArchivo(path);
+                if( creado){
                     QMessageBox::information(this,"Correcto","Archivo creado y abierto correctamente");
                     this->ui->statusLabel->setText(this->path);
                     this->ui->menuCrear->setEnabled(true);
 
+
                     //Inicializa el archivo con la primera información necesaria.
                     masterBloque master(sizeof(master),sizeof(master),sizeof(master));
 
-                    qDebug ()  << sizeof(master);
-
-                    fseek(this->archivo,0,SEEK_SET);  //Posicionar el apuntador del archivo 0 SEEK_SET Desde el principio del archivo
-
-                    fwrite(&master,sizeof(master),1,archivo); // Grabar el Registro completo
-                    fclose(archivo); // Cierra el archivo
+                    this->gestor.escribirMasterBloque(master);
 
 
                 }else{
@@ -79,13 +74,13 @@ void MainWindow::on_actionAbrir_Archivo_triggered()
     switch (ret) {
        case QMessageBox::Yes:
     {
-        fclose(archivo);
+        //fclose(archivo);
          QString filename = QFileDialog::getOpenFileName(this, tr("Abrir archivo"), QDir::currentPath(),  tr("Archivos (*.gbd)") );
          this->path = filename;
         if( !filename.isNull() )
          {
-           this->archivo = fopen(filename.toStdString().c_str(),"rb+");
-             if( archivo!= NULL){
+            bool abierto = this->gestor.abrirArchivo(path);
+             if( abierto){
                  QMessageBox::information(this,"Correcto","Archivo creado y abierto correctamente");
                  this->ui->statusLabel->setText(this->path);
                  this->ui->menuCrear->setEnabled(true);

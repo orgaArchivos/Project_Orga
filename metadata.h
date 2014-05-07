@@ -19,8 +19,8 @@ public:
    /***NO USAR MDTBLOQUE**/
     // int primermdtbloque;  //Cuál es el primer MDTBloque de las tablas
   //   int actualmdtbloque;  //Donde se está escribiendo la informacion de estructura de la tabla
-     int primer_bloque;     //El primer bloque de metaData
-     int actual_bloque;     //El bloque actual donde se está escribienda la metaData de las tablas
+   //  int primer_bloque;     //El primer bloque de metaData
+    // int actual_bloque;     //El bloque actual donde se está escribienda la metaData de las tablas
 
      /*Los 4 campos anteriores deberían escribirse como encabezado del archivo, dejando como secuencial y de constante escritura,
      por cada una de ls tablas, la información esencial, su nombre y su direccion de su MDTBloque (dir a su estructura)*/
