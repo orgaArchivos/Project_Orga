@@ -28,7 +28,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -76,8 +76,8 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>490</x>
-        <y>60</y>
+        <x>560</x>
+        <y>90</y>
         <width>161</width>
         <height>51</height>
        </rect>
@@ -92,8 +92,8 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>490</x>
-        <y>140</y>
+        <x>560</x>
+        <y>160</y>
         <width>161</width>
         <height>51</height>
        </rect>
@@ -108,8 +108,8 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>490</x>
-        <y>210</y>
+        <x>560</x>
+        <y>230</y>
         <width>161</width>
         <height>51</height>
        </rect>
@@ -118,12 +118,28 @@
        <string>Guardar Tabla</string>
       </property>
      </widget>
+     <widget class="QFrame" name="frame">
+      <property name="geometry">
+       <rect>
+        <x>550</x>
+        <y>70</y>
+        <width>181</width>
+        <height>241</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Box</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
       <string>Datos</string>
      </attribute>
-     <widget class="QTableWidget" name="tableWidget_2">
+     <widget class="QTableView" name="tableView_2">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -131,6 +147,48 @@
         <width>651</width>
         <height>371</height>
        </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_4">
+      <property name="geometry">
+       <rect>
+        <x>690</x>
+        <y>120</y>
+        <width>101</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Nuevo Registro</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_5">
+      <property name="geometry">
+       <rect>
+        <x>690</x>
+        <y>210</y>
+        <width>100</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Guardar Cambios</string>
+      </property>
+     </widget>
+     <widget class="QFrame" name="frame_2">
+      <property name="geometry">
+       <rect>
+        <x>680</x>
+        <y>110</y>
+        <width>121</width>
+        <height>171</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Box</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
       </property>
      </widget>
     </widget>
