@@ -22,3 +22,7 @@ masterBloque::masterBloque(int prox_libre, int primer_metadata, int actual_metad
     this->primer_metadata = primer_metadata;
     this->actual_metadata = actual_metadata;
 }
+
+masterBloque::masterBloque()
+{
+}

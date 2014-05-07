@@ -42,18 +42,16 @@ void MainWindow::on_actionNuevo_Archivo_triggered()
        if(!fileName.isEmpty()){
 
           this->path = fileName;
+          this->gestor.path = fileName;
           bool creado = this->gestor.crearArchivo(path);
                 if( creado){
                     QMessageBox::information(this,"Correcto","Archivo creado y abierto correctamente");
                     this->ui->statusLabel->setText(this->path);
                     this->ui->menuCrear->setEnabled(true);
 
-
                     //Inicializa el archivo con la primera información necesaria.
                     masterBloque master(sizeof(master),sizeof(master),sizeof(master));
-
                     this->gestor.escribirMasterBloque(master);
-
 
                 }else{
                     QMessageBox::critical(this,"Error","Error al abrir el archivo creado");
@@ -77,6 +75,7 @@ void MainWindow::on_actionAbrir_Archivo_triggered()
         //fclose(archivo);
          QString filename = QFileDialog::getOpenFileName(this, tr("Abrir archivo"), QDir::currentPath(),  tr("Archivos (*.gbd)") );
          this->path = filename;
+         this->gestor.path = filename;
         if( !filename.isNull() )
          {
             bool abierto = this->gestor.abrirArchivo(path);
@@ -84,6 +83,13 @@ void MainWindow::on_actionAbrir_Archivo_triggered()
                  QMessageBox::information(this,"Correcto","Archivo creado y abierto correctamente");
                  this->ui->statusLabel->setText(this->path);
                  this->ui->menuCrear->setEnabled(true);
+
+                 masterBloque master = gestor.leerMasterBloque(master);
+
+                 qDebug() << master.prox_libre;
+                 qDebug() << master.actual_metadata;
+                 qDebug() << master.primer_metadata;
+
              }else{
                  QMessageBox::critical(this,"Error","Error al abrir el archivo creado");
              }

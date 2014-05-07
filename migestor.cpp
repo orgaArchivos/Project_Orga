@@ -20,6 +20,23 @@ bool miGestor::abrirArchivo(QString path)
          }
 }
 
+masterBloque miGestor::leerMasterBloque( masterBloque master)
+{
+    this->archivo=fopen(this->path.toStdString().c_str(),"rb");
+                       // en modo de solo lectura
+
+    if(archivo==NULL)
+         qDebug() << "NO SE ABRE";
+
+    fread(&master,sizeof(master),1,archivo);
+
+    return master;
+
+    fclose(archivo); // Cierra el archivo
+
+
+}
+
 void miGestor::escribirMasterBloque(masterBloque master)
 {
     fseek(this->archivo,0,SEEK_SET);  //Posicionar el apuntador del archivo 0 SEEK_SET Desde el principio del archivo
@@ -30,4 +47,5 @@ void miGestor::escribirMasterBloque(masterBloque master)
 
 miGestor::miGestor()
 {
+
 }

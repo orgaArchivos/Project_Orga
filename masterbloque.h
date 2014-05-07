@@ -24,6 +24,7 @@ public:
     masterBloque *getMasterBloque();
 
     masterBloque(int prox_libre,int primer_metadata,int actual_metadata);
+    masterBloque();
 };
 
 #endif // MASTERBLOQUE_H

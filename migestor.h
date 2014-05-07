@@ -29,7 +29,7 @@ class miGestor
 public:
     bool crearArchivo(QString path);
     bool abrirArchivo(QString path);
-    void leerMasterBloque(masterBloque master);
+    masterBloque  leerMasterBloque(masterBloque master);
     void escribirMasterBloque(masterBloque master);
     void leermetaData(metaData metadata);
     void escribirmetaData(metaData metadata);
@@ -37,6 +37,7 @@ public:
     void escribirdataBloque(DATABloque data);
 
     FILE *archivo;
+    QString path;
 
     miGestor();
 };
