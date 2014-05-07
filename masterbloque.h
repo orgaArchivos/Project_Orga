@@ -17,12 +17,13 @@ class masterBloque
 public:
     int prox_libre;    //Este entero nos da el sigueinte espacio libre en el archivo para seguir escribiendo,
                        //puede ser tomado por cualquier tipo de bloque
-    int primer_bloque;  //Dirección del primer bloque de METADATA
-    int bloque_actual; //Dirección del bloque de METADATA actual (MDTBloque)
+    int primer_metadata;  //Dirección del primer bloque de METADATA
+    int actual_metadata; //Dirección del bloque de METADATA actual (MDTBloque)
+
     char * toBytes;    //Función que devuelve el CHAR* de bytes para ser escrito en el archivo
     char * fromBytes;  //Usada para la lectura, hace lo inverso, convierte a Class los bytes
 
-    masterBloque();
+    masterBloque(int prox_libre,int primer_metadata,int actual_metadata);
 };
 
 #endif // MASTERBLOQUE_H

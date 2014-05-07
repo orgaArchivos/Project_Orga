@@ -1,5 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
+#include "masterbloque.h"
+#include "metadata.h"
+#include "databloque.h"
+#include "campo.h"
 #include <stdio.h>
 #include <iostream>
 #include <ctype.h>
@@ -54,11 +58,11 @@ private slots:
     void clickElemento();
     void on_pushButton_clicked();
 
-
-
     void on_btnCerrar_clicked();
     void on_pushButton_2_clicked();
     void on_pushButton_3_clicked();
+    void on_tabWidget_currentChanged(int index);
+    void on_tabWidget_windowIconTextChanged(const QString &iconText);
 };
 
 #endif // MAINWINDOW_H

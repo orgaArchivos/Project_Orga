@@ -48,6 +48,18 @@ void MainWindow::on_actionNuevo_Archivo_triggered()
                     QMessageBox::information(this,"Correcto","Archivo creado y abierto correctamente");
                     this->ui->statusLabel->setText(this->path);
                     this->ui->menuCrear->setEnabled(true);
+
+                    //Inicializa el archivo con la primera información necesaria.
+                    masterBloque master(sizeof(master),sizeof(master),sizeof(master));
+
+                    qDebug ()  << sizeof(master);
+
+                    fseek(this->archivo,0,SEEK_SET);  //Posicionar el apuntador del archivo 0 SEEK_SET Desde el principio del archivo
+
+                    fwrite(&master,sizeof(master),1,archivo); // Grabar el Registro completo
+                    fclose(archivo); // Cierra el archivo
+
+
                 }else{
                     QMessageBox::critical(this,"Error","Error al abrir el archivo creado");
                 }
@@ -471,5 +483,27 @@ void MainWindow::on_pushButton_3_clicked()
       qDebug () <<  str2;
     }
 
+
+}
+
+void MainWindow::on_tabWidget_currentChanged(int index)
+{
+    if(ui->tabWidget->currentIndex() == 0 )
+    {
+       ui->actionCrear_Tabla->setEnabled(true);
+       ui->actionCrear_Campo->setEnabled(false);
+       ui->actionCrear_Registro->setEnabled(false);
+    }
+    if(ui->tabWidget->currentIndex() == 1 )
+    {
+        ui->actionCrear_Tabla->setEnabled(false);
+        ui->actionCrear_Campo->setEnabled(true);
+        ui->actionCrear_Registro->setEnabled(true);
+    }
+
+}
+
+void MainWindow::on_tabWidget_windowIconTextChanged(const QString &iconText)
+{
 
 }

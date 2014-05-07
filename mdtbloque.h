@@ -7,6 +7,7 @@
 #include <vector>
 
 using namespace std;
+/**DESCONTINUAR*/
 
 
 /*La clase MDTBloque es la que contiene la información de toda la estructura de la tabla, como los campos, sus longitudes

@@ -10,16 +10,16 @@ using namespace std;
 class miGestor
 {
 public:
-    void crearArchivo();
-    void abrirArchivo();
-    void leerMaterBloque();
-    void escribirMasterBloque();
-    void leermetaData();
-    void escribirmetaData();
-    void leerMDTBloque();
-    void escribirMDTBloque();
-    void leerdataBloque();
-    void escribirdataBloque();
+    void crearArchivo(FILE *ARCHIVO, char * byteArray);
+    void abrirArchivo(FILE *ARCHIVO, char * byteArray);
+    void leerMaterBloque(FILE *ARCHIVO, char * byteArray);
+    void escribirMasterBloque(FILE *ARCHIVO, char * byteArray);
+    void leermetaData(FILE *ARCHIVO, char * byteArray);
+    void escribirmetaData(FILE *ARCHIVO, char * byteArray);
+    void leerMDTBloque(FILE *ARCHIVO, char * byteArray);
+    void escribirMDTBloque(FILE *ARCHIVO, char * byteArray);
+    void leerdataBloque(FILE *ARCHIVO, char * byteArray);
+    void escribirdataBloque(FILE *ARCHIVO, char * byteArray);
 
     miGestor();
 };

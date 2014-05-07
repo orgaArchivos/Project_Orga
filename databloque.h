@@ -11,7 +11,8 @@ using namespace std;
 class DATABloque
 {
 public:
-    int sig_direccion;  //Me dice donde está el próximo registro de la tabla
+    int sig_bloque;  //Me dice donde está el próximo bloque de datos de la tabla de la tabla
+    int prox_libre;  //Guarda la siguiente posicion donde puedo escribir en este bloque
     int cont;
    // list <metadata>
     //Crear una estructura, tipo vector de acuerdo al tipo de campos que tiene la tabla  que llama al DATABloque
