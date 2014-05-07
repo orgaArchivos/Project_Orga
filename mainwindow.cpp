@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QComboBox>
 #include <QCheckBox>
+#include <QWidgetItem>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -448,14 +449,27 @@ void MainWindow::on_pushButton_2_clicked()
 
 void MainWindow::on_pushButton_3_clicked()
 {
-    for (int i=0; i<ui->tableWidget->rowCount(); ++i)
-    {
-       qDebug() <<ui->tableWidget->itemAt(3, 3)->text();
-        /* qDebug() <<ui->tableWidget->item(i, 1)->text();
-          qDebug() <<ui->tableWidget->item(i, 2)->text();
-           qDebug() <<ui->tableWidget->item(i, 3)->text();*/
 
-       //    ui->tableWidget->cellWidget(i,1)->;
+    int iRows = ui->tableWidget->rowCount();
+
+    for(int i = 0; i < iRows; ++i)
+    {
+
+      QComboBox *myCB = dynamic_cast<QComboBox*>(ui->tableWidget->cellWidget(i,1));
+      QCheckBox *myCHK = dynamic_cast<QCheckBox*>(ui->tableWidget->cellWidget(i,2));
+
+      QAbstractItemModel* model = ui->tableWidget->model();
+      QModelIndex idx = model->index(i,0);
+      QString str1 = model->data(idx).toString();
+
+      QModelIndex idx2 = model->index(i,3);
+      QString str2 = model->data(idx2).toString();
+
+      qDebug () <<  str1;
+      qDebug () <<myCB->currentText();
+      qDebug () <<myCHK->isChecked();
+      qDebug () <<  str2;
     }
+
 
 }
