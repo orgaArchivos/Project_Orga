@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <ctype.h>
-
+#include <QComboBox>
 #include <qdebug.h>
 #include <QMainWindow>
 #include <QDialog>
@@ -13,6 +13,7 @@
 #include <QInputDialog>
 #include <QLineEdit>
 #include <QStandardItemModel>
+#include <qpointer.h>
 
 using namespace std;
 #include <QMainWindow>
@@ -21,9 +22,14 @@ namespace Ui {
 class MainWindow;
 }
 
+class QComboBox;
+class QCheckBox;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+    QList<QPointer <QCheckBox> > indice;
+    QList<QPointer <QComboBox> > tipos_datos;
 
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -51,6 +57,8 @@ private slots:
 
 
     void on_btnCerrar_clicked();
+    void on_pushButton_2_clicked();
+    void on_pushButton_3_clicked();
 };
 
 #endif // MAINWINDOW_H

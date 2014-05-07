@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QComboBox>
+#include <QCheckBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -21,16 +23,6 @@ void MainWindow::crearTabla()
 
     connect(ui->listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
                 this, SLOT(clickElemento()));
-
-    QStandardItemModel* model = new QStandardItemModel(1,1,this);
-
-    //se hacen los encabezados de la tabla
-    model->setHorizontalHeaderItem(0,new QStandardItem(QString("Nombre")));
-    model->setHorizontalHeaderItem(1,new QStandardItem(QString("Tipo")));
-    model->setHorizontalHeaderItem(2,new QStandardItem(QString("Llave")));
-    model->setHorizontalHeaderItem(3,new QStandardItem(QString("Longitud")));
-    model->setHorizontalHeaderItem(4,new QStandardItem(QString("Decimales")));
-    ui->tableView->setModel(model);
 }
 
 
@@ -378,21 +370,44 @@ void MainWindow::on_actionCrear_Registro_triggered()
 
 void MainWindow::on_actionCrear_Tabla_triggered()
 {
-   /* return;//xD
+    bool ok;
+       QString nombre = QInputDialog::getText(this, tr("Nombre de la tabla"),
+                                            tr("Guardar como:"), QLineEdit::Normal,
+                                            "", &ok);
+       if (ok && !nombre.isEmpty())
+           qDebug () << nombre;
+           //label->setText(text);
 
-    //verifica si el archivo de registros esta abierto
-    if(!this->fileRecord.isOpen()){
-        QMessageBox::warning(this,"Error","No contiene un archivo de registros abierto");
-        return;
+
+    for(int i = 0; i < 1; i++){
+      QPointer <QCheckBox> mi_check = new QCheckBox(this);
+      QPointer <QComboBox> mi_combo = new QComboBox(this);
+
+      QStringList tipos;
+      tipos <<"ENTERO"
+            <<"CADENA";
+
+      QStringList indices;
+      indices <<"SI"
+            <<"NO";
+
+      mi_combo->addItems(tipos);
+     // mi_combo2->addItems(indices);
+
+      indice.append(mi_check);
+      tipos_datos.append(mi_combo);
+
+      const int ultima_fila = ui->tableWidget->rowCount();
+      ui->tableWidget->insertRow(ultima_fila);
+
+      ui->tableWidget->setCellWidget(i,1,mi_combo);
+      ui->tableWidget->setCellWidget(i,2,mi_check);
     }
 
-    ADTFile* empl;
+    ui->pushButton->setEnabled(true);
+    ui->pushButton_2->setEnabled(true);
+    ui->pushButton_3->setEnabled(true);
 
-    QString file = QFileDialog::getOpenFileName(this,"Abrir archivo .csv","","Archivos CSV(*.csv)");
-
-    if(empl->open(file.toStdString(),ios_base::in)){
-        empl->seekg(0,ios_base::beg);
-        //NO SE QUE HACER XD*/
 }
 
 
@@ -403,5 +418,44 @@ void MainWindow::on_btnCerrar_clicked()
 
 void MainWindow::on_pushButton_clicked()
 {
+    QPointer <QCheckBox> mi_check = new QCheckBox(this);
+    QPointer <QComboBox> mi_combo = new QComboBox(this);
+
+    QStringList tipos;
+    tipos <<"ENTERO"
+          <<"CADENA";
+
+    mi_combo->addItems(tipos);
+
+
+    indice.append(mi_check);
+    tipos_datos.append(mi_combo);
+
+    const int ultima_fila = ui->tableWidget->rowCount();
+    ui->tableWidget->insertRow(ultima_fila);
+
+    ui->tableWidget->setCellWidget(ultima_fila,1,mi_combo);
+    ui->tableWidget->setCellWidget(ultima_fila,2,mi_check);
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+   const int ultima_fila = ui->tableWidget->rowCount();
+   ui->tableWidget->removeRow(ultima_fila-1);
+   delete tipos_datos.at(ultima_fila-1);
+   tipos_datos.removeAt(ultima_fila-1);
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    for (int i=0; i<ui->tableWidget->rowCount(); ++i)
+    {
+       qDebug() <<ui->tableWidget->itemAt(3, 3)->text();
+        /* qDebug() <<ui->tableWidget->item(i, 1)->text();
+          qDebug() <<ui->tableWidget->item(i, 2)->text();
+           qDebug() <<ui->tableWidget->item(i, 3)->text();*/
+
+       //    ui->tableWidget->cellWidget(i,1)->;
+    }
 
 }

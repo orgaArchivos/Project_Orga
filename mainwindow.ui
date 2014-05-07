@@ -34,7 +34,7 @@
      <attribute name="title">
       <string>Diseño</string>
      </attribute>
-     <widget class="QTableView" name="tableView">
+     <widget class="QTableWidget" name="tableWidget">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -43,13 +43,87 @@
         <height>371</height>
        </rect>
       </property>
+      <attribute name="horizontalHeaderMinimumSectionSize">
+       <number>32</number>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>Nombre del Campo</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Tipo de Dato</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Índice</string>
+       </property>
+       <property name="textAlignment">
+        <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Longitud</string>
+       </property>
+      </column>
+     </widget>
+     <widget class="QPushButton" name="pushButton">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>490</x>
+        <y>60</y>
+        <width>161</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Agregar Campo</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_2">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>490</x>
+        <y>140</y>
+        <width>161</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Eliminar Campo</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_3">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>490</x>
+        <y>210</y>
+        <width>161</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Guardar Tabla</string>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
       <string>Datos</string>
      </attribute>
-     <widget class="QTableView" name="tableView_2">
+     <widget class="QTableWidget" name="tableWidget_2">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -168,10 +242,6 @@
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionCrear_Tabla">
-   <property name="icon">
-    <iconset resource="iconos.qrc">
-     <normaloff>:/iconos/Database 2.ico</normaloff>:/iconos/Database 2.ico</iconset>
-   </property>
    <property name="text">
     <string>Crear Tabla</string>
    </property>
