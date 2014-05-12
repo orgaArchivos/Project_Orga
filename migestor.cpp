@@ -135,9 +135,6 @@ void miGestor::leermetaData()
     Campo temp;
     int pos = 12;
 
-    int byteArrayLen = 4096;
-
-
     fseek(archivo,12,SEEK_SET);
 
 
@@ -150,6 +147,25 @@ void miGestor::leermetaData()
     cout<<"\n"<<readStruct.nom_tabla<<" nombre tabla"<<endl;
     cout<<readStruct.prox_libre<<" prox libre "<<endl;
     cout<<readStruct.pos_databloque<<" pos databloque"<<endl;
+
+    //Campo temp;
+
+    for( int i = 0; i< readStruct.cant_campos; i++)
+       {
+           memcpy(&(temp.nombre), &byteArray[pos],sizeof(const char *));
+           pos+= sizeof(int);
+
+           memcpy(&(temp.longitud), &byteArray[pos],sizeof(int));
+           pos+= sizeof(int);
+
+           memcpy(&(temp.tipo), &byteArray[pos],sizeof(int));
+           pos+= sizeof(int);
+
+           memcpy(&(temp.indice), &byteArray[pos],sizeof(int));
+           pos+= sizeof(int);
+
+           //readStruct.campos.push_back(temp);
+       }
 
      //QString foo5 = QString::fromUtf8(readStruct.nom_tabla);
 

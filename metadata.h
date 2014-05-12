@@ -30,7 +30,7 @@ public:
      char nom_tabla[30];       //El nombre de la tabla
      int pos_databloque;    //Entero que brinda la información de la posicion del bloque de DATA de la tabla
      int cant_campos;  //La cantidad dependerá de la tabla por lo tanto debo saber para ver cuantos bytes de tipo CAMPO leeré
-     vector <Campo> campos; //Un vector de tipo campo que contendrá todos los campos y sus especificaciones
+    // vector <Campo> campos; //Un vector de tipo campo que contendrá todos los campos y sus especificaciones
 
      void imprimir();
 

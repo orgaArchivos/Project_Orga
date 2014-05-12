@@ -350,10 +350,12 @@ void MainWindow::on_pushButton_3_clicked()
       else
           campoTemp.indice = 0;
 
-      this->metaTemp.campos.push_back(campoTemp);
+      //Campos deben ser escritos de otra manera
+
+     // this->metaTemp.campos.push_back(campoTemp);
     }
 
-    qDebug() <<"SIZEOF VECTOR" << sizeof(this->metaTemp.campos);
+    //qDebug() <<"SIZEOF VECTOR" << sizeof(this->metaTemp.campos);
 
     this->gestor.escribirmetaData(this->metaTemp);
 
