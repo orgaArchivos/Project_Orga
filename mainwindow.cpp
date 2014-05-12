@@ -53,6 +53,7 @@ void MainWindow::on_actionNuevo_Archivo_triggered()
                     masterBloque master(sizeof(master),sizeof(master),sizeof(master));
                     this->gestor.escribirMasterBloque(master);
 
+
                 }else{
                     QMessageBox::critical(this,"Error","Error al abrir el archivo creado");
                 }
@@ -86,7 +87,7 @@ void MainWindow::on_actionAbrir_Archivo_triggered()
 
                  masterBloque master = gestor.leerMasterBloque(master);
 
-                 qDebug() << master.prox_libre;
+                 qDebug() << "PROX LIBRE " << master.prox_libre;
                  qDebug() << master.actual_metadata;
                  qDebug() << master.primer_metadata;
 
@@ -108,42 +109,20 @@ void MainWindow::on_actionAbrir_Archivo_triggered()
 //Encargado de salvar todo el contenido que se ha escrito en los archivos
 void MainWindow::on_actionGuardar_triggered()
 {
-   /* //verifica si esta abierto el archivo
-    if(this->fileRecord.isOpen()){
-        //simplemente se hace un flush para mandarlos a guardar
-        if(this->fileRecord.flush() && this->indicesFile.flush()){
-            QMessageBox::information(this,"Correcto","El archivo se ha guardado correctamente");
-        }else{
-            QMessageBox::critical(this,"Error","Hubo un error al momento de guardar el archivo");
-        }
-    }else{
-        QMessageBox::critical(this,"Error","No tiene un archivo abierto que pueda salvar");
-    }*/
+
 }
 
 //Encargado de cerrar los archivos utilizados
 void MainWindow::on_actionCerrar_Archivo_triggered()
 {
-   /* //Cierra el archivo de indices
-    this->indicesFile.close();
-    if(this->fileRecord.isOpen()){
+
+    if(this->gestor.cerrarArchivo()){
         //si esta abierto el archivo principal entonces se cierra
-        if(this->fileRecord.close() && !this->indicesFile.isOpen()){
-
-            //limpia el vector de campos del archivo
-            while(this->fileRecord.fieldsSize() != 0){
-                this->fileRecord.removeField(0);
-            }
-
-            //Limpia el mapa de indices primarios
-            this->fileRecord.cleanMap();
             QMessageBox::information(this,"Correcto","El archivo se cerro correctamente");
+            this->ui->statusLabel->setText("");
         }else{
             QMessageBox::critical(this,"Error","Hubo un error al momento de cerrar el archivo");
         }
-    }else{
-        QMessageBox::critical(this,"Error","No tiene un archivo abierto que pueda cerrar");
-    }*/
 }
 
 //Encargado de cerrar la ventana principal y terminar la ejecucion del programa
@@ -155,100 +134,9 @@ void MainWindow::on_actionSalir_triggered()
 //Encargado de crear un nuevo campo
 void MainWindow::on_actionCrear_Campo_triggered()
 {
- /*   //verifica que si hay registros dentro del archivo no cree ningun campo
-    if(!this->fileRecord.indexesIsEmpty()){
-        QMessageBox::critical(this,"Error","Ya no puede agregar un campo al archivo");
-        return;
-    }
 
-    //verifica si el archivo esta abierto
-    if(this->fileRecord.isOpen()){
-        //crea una nueva ventana para pedir el nuevo campo
-        NewFieldWindow* createField = new NewFieldWindow();
-
-        //ejecuta la ventana
-        createField->exec();
-
-        //obtiene el nuevo campo que se ha creado
-        Field* newField = createField->getField();
-
-        //verifica que no sea nulo y verifica si este campo es la llave principal
-        if(newField != NULL){
-            for(int i = 0; i < this->fileRecord.fieldsSize(); i++){
-                if(this->fileRecord.getField(i)->isKey()){
-                    newField->setKey(0);
-                    i = this->fileRecord.fieldsSize();
-                }
-            }
-            //se agrega el nuevo campo al vector
-            this->fileRecord.addField(newField);
-        }
-
-        //se manda a escribir los campos al archivo
-        string header = this->fileRecord.toStringHeader();
-        cout<<header<<endl;
-        this->fileRecord.setDataStart(header.size());
-        this->fileRecord.seekp(0,ios_base::beg);
-        this->fileRecord.write(header.c_str(),header.size());
-        this->fileRecord.flush();
-
-        //se obtiene el tamanio de cada registro del archivo
-        vector<Field*> fields = this->fileRecord.getFields();
-        int rl = 0;
-        for(int i = 0; i < fields.size(); i++){
-            rl += fields.at(i)->getLength();
-        }
-        this->fileRecord.setRecordLength(rl);
-
-        //se elimina la ventana creada
-        delete createField;
-    }else{
-        QMessageBox::critical(this,"Error","No tiene un archivo abierto para crear un Campo");
-    }*/
 }
 
-/*//Encargada de modificar un campo ya existente
-void MainWindow::on_modifyField_triggered()
-{
-   //verifica que si ya hay registros en el archivo no se pueda modificar ningun campo
-    if(!this->fileRecord.indexesIsEmpty()){
-        QMessageBox::critical(this,"Error","No puede modificar campos");
-        return;
-    }
-
-    //verifica que archivo este abierto
-    if(this->fileRecord.isOpen()){
-        //crea una nueva ventana para pedir el campo que se desea modificar y por cual
-        ModifyFieldWindow* modifyField = new ModifyFieldWindow();
-
-        //se le manda el vector de campos para el combobox
-        modifyField->setFields(this->fileRecord.getFields());
-        modifyField->exec();
-
-        //se toma el nuevo campo creado
-        Field* newField = modifyField->getField();
-
-        if(newField != NULL){
-            //toma el indice para modificar ese campo
-            int index = modifyField->getIndex();
-
-            //modifica los atributos de un campo
-            this->fileRecord.modifyField(index,newField);
-        }else{
-
-        }
-
-        //escribe en el archivo el  nuevo header
-        string header = this->fileRecord.toStringHeader();
-        this->fileRecord.seekp(0,ios_base::beg);
-        this->fileRecord.write(header.c_str(),header.size());
-        this->fileRecord.flush();
-
-        delete modifyField;
-    }else{
-        QMessageBox::warning(this,"Error","No tiene un archivo abierto para modificar sus campos");
-    }
-}*/
 
 /*//Encargado de mostrar en la tabla principal todos los campos existentes
 void MainWindow::on_listField_triggered()
@@ -321,77 +209,23 @@ void MainWindow::on_listField_triggered()
 //Encargado de insertar un nuevo registro al archivo
 void MainWindow::on_actionCrear_Registro_triggered()
 {
-   /* //verifica que existan campos en el archivo
-    if(this->fileRecord.fieldsSize() == 0){
-        QMessageBox::warning(this,"Error","No tiene campos en el archivo, por favor ingrese un campo para continuar");
-        return;
-    }
 
-    //Validar que cuando se ingrese la llave, esta sea unica
-    vector<string> record;
-    vector<Field*> tmpfields = this->fileRecord.getFields();
-
-    for(int i = 0; i < tmpfields.size(); i++){
-        Field* currentField = tmpfields[i];
-
-        InputDialog* idialog = new InputDialog();
-        idialog->setField(currentField);
-        idialog->exec();
-
-        QString text = idialog->getString();
-
-        record.push_back(text.toStdString());
-        delete idialog;
-    }
-
-    //verifica que la cantidad de ingresos sea igual a la cantidad de campos
-    if(record.size() != tmpfields.size()){
-        QMessageBox::critical(this,"Error","Error en la cantidad de campos que lleno");
-        return;
-    }
-
-    //crea un nuevo registro
-    Record* newRecord =  new Record(tmpfields,record);
-
-    //verficica que la llave primaria no exista
-    if(this->fileRecord.addRecord(newRecord)){
-        //Obtiene un vector de indices principales
-        vector<PrimaryIndex*> indexes = this->fileRecord.getIndexes();
-
-        //genera como un toString para los indicies
-        stringstream ss;
-        for(int i = 0; i < indexes.size(); i++){
-            ss<<indexes.at(i)->toString();
-            if(i != indexes.size() -1){
-                ss<<'/';
-            }
-        }
-
-        //guarda los indices primarios en el archivo
-        this->indicesFile.seekp(0,ios_base::beg);
-        this->indicesFile.write(ss.str().c_str(),ss.str().length());
-        this->indicesFile.flush();
-
-        QMessageBox::information(this,"Correcto","Se ingreso correctamente el nuevo registro");
-        delete newRecord;
-        //lo borra de memoria, pero ya esta guardado en el archivo
-    }else{
-        //borra el nuevo registro porque no sirvio de nada
-        QMessageBox::critical(this,"Error","Hubo un error al insertar el nuevo registro");
-        delete newRecord;
-    }*/
 }
 
 void MainWindow::on_actionCrear_Tabla_triggered()
 {
-    bool ok;
+       bool ok;
        QString nombre = QInputDialog::getText(this, tr("Nombre de la tabla"),
                                             tr("Guardar como:"), QLineEdit::Normal,
                                             "", &ok);
        if (ok && !nombre.isEmpty())
-           qDebug () << nombre;
-           //label->setText(text);
+       {
+           this->metaTemp.nom_tabla = nombre.toStdString().c_str();
+           qDebug () << "CONVERT" << QString::fromUtf8(metaTemp.nom_tabla);
+       }
 
+      //INICIALIZAR EN CERO LA POSICION DE LA DATA DE LA TABLA PORQUE AUN NO TIENE REGISTROS.
+       this->metaTemp.pos_databloque = 0;
 
     for(int i = 0; i < 1; i++){
       QPointer <QCheckBox> mi_check = new QCheckBox(this);
@@ -406,7 +240,7 @@ void MainWindow::on_actionCrear_Tabla_triggered()
             <<"NO";
 
       mi_combo->addItems(tipos);
-     // mi_combo2->addItems(indices);
+
 
       indice.append(mi_check);
       tipos_datos.append(mi_combo);
@@ -465,6 +299,8 @@ void MainWindow::on_pushButton_3_clicked()
 
     int iRows = ui->tableWidget->rowCount();
 
+    this->metaTemp.cant_campos = iRows;
+
     for(int i = 0; i < iRows; ++i)
     {
 
@@ -480,10 +316,26 @@ void MainWindow::on_pushButton_3_clicked()
 
       qDebug () <<  str1;
       qDebug () <<myCB->currentText();
-      qDebug () <<myCHK->isChecked();
-      qDebug () <<  str2;
+      //qDebug () <<;
+      qDebug () <<  str2.toInt();
+
+      Campo campoTemp;
+
+      campoTemp.nombre = str1.toStdString().c_str();
+      campoTemp.longitud = str2.toInt();
+      campoTemp.nombre = myCB->currentText().toStdString().c_str();
+
+      if(myCHK->isChecked())
+          campoTemp.indice = 1;
+      else
+          campoTemp.indice = 0;
+
+      this->metaTemp.campos.push_back(campoTemp);
     }
 
+    qDebug() <<"SIZEOF VECTOR" << sizeof(this->metaTemp.campos);
+
+     this->gestor.escribirmetaData(this->metaTemp);
 
 }
 

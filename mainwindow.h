@@ -45,6 +45,7 @@ private:
     Ui::MainWindow *ui;
     miGestor gestor;
     QString path;
+    metaData metaTemp;
 
 private slots:
     void on_actionNuevo_Archivo_triggered();
