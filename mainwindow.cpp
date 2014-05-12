@@ -10,7 +10,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    crearTabla();
 }
 
 MainWindow::~MainWindow()
@@ -18,10 +17,14 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::crearTabla()
+void MainWindow::cargarTablas()
 {
+
     ui->listWidget->addItem("algo");
 
+    this->gestor.leermetaData();
+
+//El evento que desplegará los datos de la tabla al hacer doble clic en el nombre
     connect(ui->listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
                 this, SLOT(clickElemento()));
 }
@@ -52,7 +55,6 @@ void MainWindow::on_actionNuevo_Archivo_triggered()
                     //Inicializa el archivo con la primera información necesaria.
                     masterBloque master(sizeof(master),sizeof(master),sizeof(master));
                     this->gestor.escribirMasterBloque(master);
-
 
                 }else{
                     QMessageBox::critical(this,"Error","Error al abrir el archivo creado");
@@ -90,6 +92,8 @@ void MainWindow::on_actionAbrir_Archivo_triggered()
                  qDebug() << "PROX LIBRE " << master.prox_libre;
                  qDebug() << master.actual_metadata;
                  qDebug() << master.primer_metadata;
+
+                 this->gestor.leermetaData();
 
              }else{
                  QMessageBox::critical(this,"Error","Error al abrir el archivo creado");
@@ -218,11 +222,20 @@ void MainWindow::on_actionCrear_Tabla_triggered()
        QString nombre = QInputDialog::getText(this, tr("Nombre de la tabla"),
                                             tr("Guardar como:"), QLineEdit::Normal,
                                             "", &ok);
+       qDebug () << "ANTES CONVERT" << nombre;
+       qDebug () << "sizeof string " << nombre;
+
+       string tmp = nombre.toStdString();
+       strcpy(this->metaTemp.nom_tabla, tmp.c_str());
+
+       this->metaTemp.prox_libre = sizeof(metaTemp);
+
        if (ok && !nombre.isEmpty())
        {
-           this->metaTemp.nom_tabla = nombre.toStdString().c_str();
-           qDebug () << "CONVERT" << QString::fromUtf8(metaTemp.nom_tabla);
+          /// this->metaTemp.nom_tabla = nombre.toStdString().c_str();
+           qDebug () << "CONVERT" << metaTemp.nom_tabla;
        }
+
 
       //INICIALIZAR EN CERO LA POSICION DE LA DATA DE LA TABLA PORQUE AUN NO TIENE REGISTROS.
        this->metaTemp.pos_databloque = 0;
@@ -240,7 +253,6 @@ void MainWindow::on_actionCrear_Tabla_triggered()
             <<"NO";
 
       mi_combo->addItems(tipos);
-
 
       indice.append(mi_check);
       tipos_datos.append(mi_combo);
@@ -301,6 +313,7 @@ void MainWindow::on_pushButton_3_clicked()
 
     this->metaTemp.cant_campos = iRows;
 
+
     for(int i = 0; i < iRows; ++i)
     {
 
@@ -319,11 +332,18 @@ void MainWindow::on_pushButton_3_clicked()
       //qDebug () <<;
       qDebug () <<  str2.toInt();
 
-      Campo campoTemp;
+      Campo campoTemp;   
 
-      campoTemp.nombre = str1.toStdString().c_str();
+      strcpy(campoTemp.nombre, str1.toStdString().c_str());
+
+    //  campoTemp.nombre = str1.toStdString().c_str();
       campoTemp.longitud = str2.toInt();
-      campoTemp.nombre = myCB->currentText().toStdString().c_str();
+     // campoTemp.nombre = myCB->currentText().toStdString().c_str();
+
+      if(myCB->currentText() == "CADENA")
+          campoTemp.tipo = 0;
+      else
+          campoTemp.tipo = 1;
 
       if(myCHK->isChecked())
           campoTemp.indice = 1;
@@ -335,7 +355,16 @@ void MainWindow::on_pushButton_3_clicked()
 
     qDebug() <<"SIZEOF VECTOR" << sizeof(this->metaTemp.campos);
 
-     this->gestor.escribirmetaData(this->metaTemp);
+    this->gestor.escribirmetaData(this->metaTemp);
+
+    metaTemp.imprimir();
+
+
+    //Limpiar la qTableWidget, si los datos fueron guardados correctamente y si cumplen las validaciones
+    for(int i=0; i < iRows; i++)
+    {
+       this->on_pushButton_2_clicked();
+    }
 
 }
 

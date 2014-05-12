@@ -32,10 +32,12 @@ public:
     bool cerrarArchivo();
     masterBloque  leerMasterBloque(masterBloque master);
     void escribirMasterBloque(masterBloque master);
-    void leermetaData(metaData metadata);
+    void leermetaData();
     void escribirmetaData(metaData metadata);
     void leerdataBloque(DATABloque data);
     void escribirdataBloque(DATABloque data);
+    void ByteArrayToMetadata(char * byteArray, int &byteArrayLen, int pos, metaData &readStruct, Campo &temp);
+
 
     FILE *archivo;
     QString path;

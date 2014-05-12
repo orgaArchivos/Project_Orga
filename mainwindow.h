@@ -56,7 +56,7 @@ private slots:
     void on_actionCerrar_Archivo_triggered();
     void on_actionGuardar_triggered();
     void on_actionSalir_triggered();
-    void crearTabla();
+    void cargarTablas();
     void clickElemento();
     void on_pushButton_clicked();
 
