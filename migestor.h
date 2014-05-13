@@ -34,8 +34,11 @@ public:
     void escribirMasterBloque(masterBloque master);
     void leermetaData();
     void escribirmetaData(metaData metadata);
+    void escribirCampo(Campo campo);
+    void leerCampo(Campo campo);
     void leerdataBloque(DATABloque data);
     void escribirdataBloque(DATABloque data);
+    long int posPuntero();
     void ByteArrayToMetadata(char * byteArray, int &byteArrayLen, int pos, metaData &readStruct, Campo &temp);
 
 

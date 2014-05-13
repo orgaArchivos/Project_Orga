@@ -89,11 +89,11 @@ void MainWindow::on_actionAbrir_Archivo_triggered()
 
                  masterBloque master = gestor.leerMasterBloque(master);
 
-                 qDebug() << "PROX LIBRE " << master.prox_libre;
-                 qDebug() << master.actual_metadata;
-                 qDebug() << master.primer_metadata;
+                 int tamanio = ftell(this->gestor.archivo);
+                 cout << "TAMAÑO: " <<tamanio <<endl;
 
-                 this->gestor.leermetaData();
+                 //if(tamanio > 12)
+                  this->gestor.leermetaData();
 
              }else{
                  QMessageBox::critical(this,"Error","Error al abrir el archivo creado");
@@ -222,18 +222,12 @@ void MainWindow::on_actionCrear_Tabla_triggered()
        QString nombre = QInputDialog::getText(this, tr("Nombre de la tabla"),
                                             tr("Guardar como:"), QLineEdit::Normal,
                                             "", &ok);
-       qDebug () << "ANTES CONVERT" << nombre;
-       qDebug () << "sizeof string " << nombre;
 
-       string tmp = nombre.toStdString();
-       strcpy(this->metaTemp.nom_tabla, tmp.c_str());
-
-       this->metaTemp.prox_libre = sizeof(metaTemp);
-
+       this->metaTemp.prox_libre += sizeof(metaTemp);
        if (ok && !nombre.isEmpty())
        {
-          /// this->metaTemp.nom_tabla = nombre.toStdString().c_str();
-           qDebug () << "CONVERT" << metaTemp.nom_tabla;
+           string tmp = nombre.toStdString();
+           strcpy(this->metaTemp.nom_tabla, tmp.c_str());
        }
 
 
@@ -282,11 +276,9 @@ void MainWindow::on_pushButton_clicked()
     QPointer <QComboBox> mi_combo = new QComboBox(this);
 
     QStringList tipos;
-    tipos <<"ENTERO"
-          <<"CADENA";
+    tipos <<"ENTERO" <<"CADENA";
 
     mi_combo->addItems(tipos);
-
 
     indice.append(mi_check);
     tipos_datos.append(mi_combo);
@@ -313,32 +305,27 @@ void MainWindow::on_pushButton_3_clicked()
 
     this->metaTemp.cant_campos = iRows;
 
+    this->gestor.escribirmetaData(this->metaTemp);
 
     for(int i = 0; i < iRows; ++i)
     {
-
+      //Convertir el widget a combobox
       QComboBox *myCB = dynamic_cast<QComboBox*>(ui->tableWidget->cellWidget(i,1));
+      //Convertir el widget a checkbox
       QCheckBox *myCHK = dynamic_cast<QCheckBox*>(ui->tableWidget->cellWidget(i,2));
 
       QAbstractItemModel* model = ui->tableWidget->model();
       QModelIndex idx = model->index(i,0);
+     //Sacar en string el nombre del campo
       QString str1 = model->data(idx).toString();
-
+       //Sacar en qstring la longitud del campo, luego convertirla a int
       QModelIndex idx2 = model->index(i,3);
       QString str2 = model->data(idx2).toString();
 
-      qDebug () <<  str1;
-      qDebug () <<myCB->currentText();
-      //qDebug () <<;
-      qDebug () <<  str2.toInt();
-
-      Campo campoTemp;   
+      Campo campoTemp;
 
       strcpy(campoTemp.nombre, str1.toStdString().c_str());
-
-    //  campoTemp.nombre = str1.toStdString().c_str();
       campoTemp.longitud = str2.toInt();
-     // campoTemp.nombre = myCB->currentText().toStdString().c_str();
 
       if(myCB->currentText() == "CADENA")
           campoTemp.tipo = 0;
@@ -350,14 +337,9 @@ void MainWindow::on_pushButton_3_clicked()
       else
           campoTemp.indice = 0;
 
-      //Campos deben ser escritos de otra manera
+      this->gestor.escribirCampo(campoTemp);
 
-     // this->metaTemp.campos.push_back(campoTemp);
     }
-
-    //qDebug() <<"SIZEOF VECTOR" << sizeof(this->metaTemp.campos);
-
-    this->gestor.escribirmetaData(this->metaTemp);
 
     metaTemp.imprimir();
 

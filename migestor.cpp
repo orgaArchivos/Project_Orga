@@ -97,27 +97,7 @@ void miGestor::ByteArrayToMetadata(char * byteArray, int &byteArrayLen, int pos,
     cout<<readStruct.pos_databloque<<" ";
 
 
-     // cout<<readStruct.cant_campos<<" ";
 
-  /*  for( int i = 0; i< readStruct.cant_campos; i++)
-    {
-        memcpy(&(temp.nombre), &byteArray[pos],sizeof(const char *));
-        pos+= sizeof(int);
-
-        memcpy(&(temp.longitud), &byteArray[pos],sizeof(int));
-        pos+= sizeof(int);
-
-        memcpy(&(temp.tipo), &byteArray[pos],sizeof(int));
-        pos+= sizeof(int);
-
-        memcpy(&(temp.indice), &byteArray[pos],sizeof(int));
-        pos+= sizeof(int);
-
-        readStruct.campos.push_back(temp);
-    }*/
-
-
- // }
  }
 
 void miGestor::leermetaData()
@@ -132,11 +112,9 @@ void miGestor::leermetaData()
 
     metaData readStruct;
 
-    Campo temp;
     int pos = 12;
 
     fseek(archivo,12,SEEK_SET);
-
 
     //cout<< SEEK_CUR<<" poisiion actuAL ";
 
@@ -148,64 +126,18 @@ void miGestor::leermetaData()
     cout<<readStruct.prox_libre<<" prox libre "<<endl;
     cout<<readStruct.pos_databloque<<" pos databloque"<<endl;
 
-    //Campo temp;
+    Campo temp;
 
     for( int i = 0; i< readStruct.cant_campos; i++)
        {
-           memcpy(&(temp.nombre), &byteArray[pos],sizeof(const char *));
-           pos+= sizeof(int);
-
-           memcpy(&(temp.longitud), &byteArray[pos],sizeof(int));
-           pos+= sizeof(int);
-
-           memcpy(&(temp.tipo), &byteArray[pos],sizeof(int));
-           pos+= sizeof(int);
-
-           memcpy(&(temp.indice), &byteArray[pos],sizeof(int));
-           pos+= sizeof(int);
-
-           //readStruct.campos.push_back(temp);
+          leerCampo(temp);
        }
-
-     //QString foo5 = QString::fromUtf8(readStruct.nom_tabla);
-
-    // cout<<"\n"<<foo5.toStdString()<<" ";
-
-     //cout<<readStruct.prox_libre<<" ";
-    // cout<<readStruct.pos_databloque<<" ";
-
-   /* memcpy(&(readStruct.prox_libre), &byteArray[pos], sizeof(int));
-    pos+= sizeof(int);
-
-   // cout<<readStruct.prox_libre<<" ";
-
-
-   memcpy(&(readStruct.nom_tabla), &byteArray[pos], sizeof(const char *));
-   pos+= sizeof(char);
-
-
- //  cout<<"\n"<<readStruct.nom_tabla<<" ";
-
-   memcpy(&(readStruct.pos_databloque), &byteArray[pos], sizeof(int));
-   pos+= sizeof(int);
-
-    //cout<<readStruct.pos_databloque<<" ";
-
-   memcpy(&(readStruct.cant_campos), &byteArray[pos], sizeof(int));
-   pos+= sizeof(int);
-  cout<<readStruct.cant_campos<<" ";
-
-
-
-
-    ByteArrayToMetadata(byteArray,byteArrayLen,12,readStruct,temp);*/
 
 }
 
 void miGestor::escribirmetaData(metaData metadata)
 {
-    //Escribe los datos de la tabla, sus campos, nombre
-
+    //Escribe los datos de la tabla, sus campos, nombr
 
     if(this->archivo == NULL)
       {
@@ -214,25 +146,51 @@ void miGestor::escribirmetaData(metaData metadata)
     else
     {
          this->archivo = fopen(path.toStdString().c_str(),"rb+");
-         qDebug() <<"size of metadata" << sizeof(metadata);
+
          masterBloque master = leerMasterBloque(master);
-         qDebug () << "será escrita en " << master.prox_libre;
 
          fseek(archivo,sizeof(master),SEEK_SET);
 
-         qDebug () << "TAMAÑO DE TABLA " << sizeof(metadata);
-
-         metadata.imprimir();
-
-
          fwrite(&metadata,sizeof(metadata),1,archivo);
-
-         qDebug () << "" << QString::fromUtf8(metadata.nom_tabla);
 
          fflush(archivo);
 
+         metadata.imprimir();
     }
 
+}
+
+void miGestor::escribirCampo(Campo campo)
+{
+    this->archivo = fopen(path.toStdString().c_str(),"rb+");
+
+    qDebug ()  << "POS EN CAMPO" << ftell(archivo);
+
+    //metaData pos = leermetadataBloque(pos);
+
+    fseek(archivo,0,SEEK_END);
+
+    fwrite(&campo,sizeof(campo),1,archivo);
+
+    fflush(archivo);
+
+
+    campo.imprimir();
+
+
+}
+
+void miGestor::leerCampo(Campo campo)
+{
+    fread(&campo,sizeof(campo),1,archivo);
+
+    campo.imprimir();
+
+}
+
+long miGestor::posPuntero()
+{
+    return ftell(archivo);
 }
 
 
