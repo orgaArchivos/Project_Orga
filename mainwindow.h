@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 #include "masterbloque.h"
 #include "metadata.h"
+#include "metacampos.h"
 #include "databloque.h"
 #include "campo.h"
 #include "migestor.h"
@@ -56,7 +57,7 @@ private slots:
     void on_actionCerrar_Archivo_triggered();
     void on_actionGuardar_triggered();
     void on_actionSalir_triggered();
-    void cargarTablas();
+    void cargarTablas(metaCampos tablas);
     void clickElemento();
     void on_pushButton_clicked();
 

@@ -2,25 +2,12 @@
 
 void metaData::imprimir()
 {
-    cout<<"PROXLIBRE "<<this->prox_libre<<endl;
-     cout<<"POSDATABLOQUE "<<this->pos_databloque<<endl;
-
-      cout<<"NOMBRE "<<nom_tabla<<endl;
-
-    //  qDebug () << "NOMBRE" << nom_tabla;
-      cout<<"CANT CAMPOS "<<this->cant_campos<<endl;
-
-   /*   for( int i= 0; i< campos.size() ; i++)
-      {
-          Campo uno = campos.at(i);
-          uno.imprimir();
-      }*/
+      qDebug () <<"PROXLIBRE "<<this->prox_libre;
+      qDebug () <<"POSDATABLOQUE "<<this->pos_databloque;
+      qDebug () <<"NOMBRE "<<nom_tabla;
+      qDebug () <<"CANT CAMPOS "<<this->cant_campos;
 }
 
-QString metaData::getNomTabla()
-{
-    //return this->nom_tabla.toStdString();
-}
 
 metaData::metaData()
 {

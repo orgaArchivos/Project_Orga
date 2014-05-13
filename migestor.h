@@ -5,6 +5,7 @@
 #include <ctype.h>
 #include "masterbloque.h"
 #include "metadata.h"
+#include "metacampos.h"
 #include "databloque.h"
 #include <stdio.h>
 #include <iostream>
@@ -32,7 +33,7 @@ public:
     bool cerrarArchivo();
     masterBloque  leerMasterBloque(masterBloque master);
     void escribirMasterBloque(masterBloque master);
-    void leermetaData();
+    metaCampos leermetaData();
     void escribirmetaData(metaData metadata);
     void escribirCampo(Campo campo);
     void leerCampo(Campo campo);

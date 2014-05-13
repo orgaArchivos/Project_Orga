@@ -2,11 +2,11 @@
 
 void Campo::imprimir()
 {
-      cout<<"\n";
-      cout << "nombre: " << std::string(nombre)<<endl;
-      cout<<"longitud: "<<longitud<<endl;
-      cout<<"tipo: "<<this->tipo<<endl;
-      cout<<"indice: "<<this->indice<<endl;
+       cout <<"\n";
+       cout << "nombre: " << std::string(nombre)<<endl;
+       cout <<"longitud: "<<longitud<<endl;
+       cout <<"tipo: "<<this->tipo<<endl;
+       cout <<"indice: "<<this->indice<<endl;
 }
 
 Campo::Campo(QString nombre, int longitud, int tipo, int indice)

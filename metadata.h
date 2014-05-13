@@ -34,8 +34,6 @@ public:
 
      void imprimir();
 
-     QString getNomTabla();
-
     metaData();
 };
 

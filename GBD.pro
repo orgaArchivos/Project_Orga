@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     databloque.cpp \
     migestor.cpp \
     metadata.cpp \
-    campo.cpp
+    campo.cpp \
+    metacampos.cpp
 
 HEADERS  += mainwindow.h \
     masterbloque.h \
@@ -27,7 +28,8 @@ HEADERS  += mainwindow.h \
     databloque.h \
     migestor.h \
     metadata.h \
-    campo.h
+    campo.h \
+    metacampos.h
 
 FORMS    += mainwindow.ui
 
