@@ -99,18 +99,23 @@ metaCampos miGestor::leermetaData()
     fread(&readStruct,sizeof(metaData),1,archivo);
        // Lee el "Registro", de tamano=sizeof(registro) del archivo "alias"
 
-     qDebug () <<readStruct.cant_campos<<" cant campos"<<endl;
+    /* qDebug () <<readStruct.cant_campos<<" cant campos"<<endl;
      qDebug () <<"\n"<<readStruct.nom_tabla<<" nombre tabla"<<endl;
      qDebug () <<readStruct.prox_libre<<" prox libre "<<endl;
      qDebug () <<readStruct.pos_databloque<<" pos databloque"<<endl;
 
-    Campo temp;
+    qDebug () << "ANTES DE LEER CAMPOS " << ftell (archivo);*/
+
+    Campo campo;
 
     for( int i = 0; i< readStruct.cant_campos; i++)
        {
-          leerCampo(temp);
+          //leerCampo(temp);
+          fread(&campo,sizeof(campo),1,archivo);
 
-          readStruct.campos.push_back(temp);
+         // qDebug () << "CAMPO " << i+1 << ftell (archivo);
+
+          readStruct.campos.push_back(campo);
        }
 
     return readStruct;
@@ -134,6 +139,8 @@ void miGestor::escribirmetaData(metaData metadata)
 
          fwrite(&metadata,sizeof(metadata),1,archivo);
 
+         qDebug () << "metadata escrita en " << ftell (archivo);
+
          fflush(archivo);
 
          metadata.imprimir();
@@ -145,24 +152,23 @@ void miGestor::escribirCampo(Campo campo)
 {
     this->archivo = fopen(path.toStdString().c_str(),"rb+");
 
-    qDebug ()  << "POS EN CAMPO" << ftell(archivo);
+  //  qDebug ()  << "POS EN CAMPO" << ftell(archivo);
 
     fseek(archivo,0,SEEK_END);
 
     fwrite(&campo,sizeof(campo),1,archivo);
 
+    //qDebug () << "CAMPO " <<campo.nombre<<" escrito en " << ftell (archivo);
+
     fflush(archivo);
-
-//    campo.imprimir();
-
-
 }
 
 void miGestor::leerCampo(Campo campo)
 {
+    //fseek(archivo,56,SEEK_SET);
     fread(&campo,sizeof(campo),1,archivo);
 
-    campo.imprimir();
+  //  campo.imprimir();
 
 }
 
