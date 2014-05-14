@@ -17,32 +17,42 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::cargarTablas(metaCampos tablas)
+void MainWindow::cargarTablas(vector<metaCampos> tablas)
 {
     ui->listWidget->clear();
-    ui->listWidget->addItem(tablas.nom_tabla);
-
-    tablas.imprimir();
+    for(std::size_t i=0;i<tablas.size();++i)
+      {
+        ui->listWidget->addItem(metaCampos(tablas.at(i)).nom_tabla);
+        metaCampos(tablas.at(i)).imprimir();
+      }
 
 //El evento que desplegará los datos de la tabla al hacer doble clic en el nombre
     connect(ui->listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),this, SLOT(clickElemento()));
+   // connect(ui->listWidget, SIGNAL((QListWidgetItem*)),this, SLOT(clickElemento()));
 }
 
 
 void MainWindow::clickElemento()
 {
-    metaCampos tablas =  this->gestor.leermetaData();
     ui->tableWidget_2->clear();
 
-    for(int i = 0; i < tablas.cant_campos ; i++)
+    int index_clic = ui->listWidget->currentRow();
+
+    vector<metaCampos> tablas =  this->gestor.leermetaData();
+
+    metaCampos elegida =  metaCampos(tablas.at(index_clic));
+
+    elegida.imprimir();
+
+  /*  for(int i = 0; i < elegida.cant_campos ; i++)
     {
      ui->tableWidget_2->insertColumn(i);
-     QTableWidgetItem* qtwi = new QTableWidgetItem(QString(Campo(tablas.campos.at(i)).nombre),QTableWidgetItem::Type);
+     QTableWidgetItem* qtwi = new QTableWidgetItem(QString(Campo(elegida.campos.at(i)).nombre),QTableWidgetItem::Type);
      ui->tableWidget_2->setHorizontalHeaderItem(i,qtwi);
     }
 
     const int ultima_fila = ui->tableWidget_2->rowCount();
-    ui->tableWidget_2->insertRow(ultima_fila);
+    ui->tableWidget_2->insertRow(ultima_fila);*/
 }
 
 void MainWindow::on_actionNuevo_Archivo_triggered()
@@ -64,6 +74,8 @@ void MainWindow::on_actionNuevo_Archivo_triggered()
                     master.actual_metadata= sizeof(master);
                     master.primer_metadata= sizeof(master);
                     master.prox_libre= sizeof(master);
+
+
                     this->gestor.escribirMasterBloque(master);
 
                 }else{
@@ -103,12 +115,10 @@ void MainWindow::on_actionAbrir_Archivo_triggered()
                   int tamanio = ftell(this->gestor.archivo);
                   qDebug ()  << "TAMAÑO: " <<tamanio <<endl;
 
-                  //Solo si tiene una longitud mayor que el master bloque se leerá el resto.
 
-                  if(tamanio > 12)
+                  if(tamanio > 16)
                   {
-                      metaCampos tablas =  this->gestor.leermetaData();
-
+                      vector <metaCampos> tablas =  this->gestor.leermetaData();
                       cargarTablas(tablas);
                   }
 
@@ -168,13 +178,10 @@ void MainWindow::on_actionCrear_Registro_triggered()
 void MainWindow::on_actionCrear_Tabla_triggered()
 {
        bool ok;
-     //  do{
+
        QString nombre = QInputDialog::getText(this, tr("Nombre de la tabla"),
                                             tr("Guardar como:"), QLineEdit::Normal,
                                             "", &ok);
-
-
-       this->metaTemp.prox_libre = sizeof(metaTemp);
 
        if (ok && !nombre.isEmpty())
        {
@@ -190,12 +197,10 @@ void MainWindow::on_actionCrear_Tabla_triggered()
       QPointer <QComboBox> mi_combo = new QComboBox(this);
 
       QStringList tipos;
-      tipos <<"ENTERO"
-            <<"CADENA";
+      tipos <<"ENTERO" <<"CADENA";
 
       QStringList indices;
-      indices <<"SI"
-            <<"NO";
+      indices <<"SI"  <<"NO";
 
       mi_combo->addItems(tipos);
 
@@ -287,10 +292,9 @@ void MainWindow::on_pushButton_3_clicked()
           campoTemp.indice = 0;
 
       this->gestor.escribirCampo(campoTemp);
+      fflush(this->gestor.archivo);
 
     }
-
-    metaTemp.imprimir();
 
     //Limpiar la qTableWidget, si los datos fueron guardados correctamente y si cumplen las validaciones
     for(int i=0; i < iRows; i++)

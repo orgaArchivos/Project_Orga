@@ -33,21 +33,13 @@ bool miGestor::cerrarArchivo()
 
 masterBloque miGestor::leerMasterBloque( masterBloque master)
 {
-   // this->archivo=fopen(this->path.toStdString().c_str(),"rb");
-                       // en modo de solo lectura
     this->archivo = fopen(path.toStdString().c_str(),"rb+");
     rewind(archivo);
-
-    if(archivo==NULL)
-         qDebug() << "NO SE ABRE";
 
     fread(&master,sizeof(master),1,archivo);
 
     //El puntero queda al final del masterbloque
     return master;
-
- //   fclose(archivo); // Cierra el archivo
-
 
 }
 
@@ -55,10 +47,9 @@ void miGestor::escribirMasterBloque(masterBloque master)
 {
     fseek(this->archivo,0,SEEK_SET);  //Posicionar el apuntador del archivo 0 SEEK_SET Desde el principio del archivo
 
-   // qDebug ()  << "SIZEOF MASTERBLOQUE" << sizeof(master);
-
     fwrite(&master,sizeof(master),1,archivo); // Grabar el Registro completo
-
+    int pos=ftell(archivo)+4;
+    fwrite(&pos,sizeof(int),1,archivo);
     fflush(archivo);
 }
 
@@ -67,8 +58,8 @@ void miGestor::ByteArrayToMetadata(char * byteArray, int &byteArrayLen, int pos,
    this->archivo = fopen(path.toStdString().c_str(),"rb+");
 
    //while(pos < byteArrayLen){
-     memcpy(&(readStruct.prox_libre), &byteArray[pos], sizeof(int));
-     pos+= sizeof(int);
+  /*   memcpy(&(readStruct.prox_libre), &byteArray[pos], sizeof(int));
+     pos+= sizeof(int);*/
 
     memcpy(&(readStruct.nom_tabla), &byteArray[pos], sizeof(const char *));
     pos+= sizeof(char);
@@ -82,85 +73,117 @@ void miGestor::ByteArrayToMetadata(char * byteArray, int &byteArrayLen, int pos,
 
      qDebug () <<readStruct.cant_campos<<" ";
      qDebug () <<"\n"<<readStruct.nom_tabla<<" ";
-     qDebug () <<readStruct.prox_libre<<" ";
      qDebug () <<readStruct.pos_databloque<<" ";
  }
 
-metaCampos miGestor::leermetaData()
+vector <metaCampos> miGestor::leermetaData()
 {
     this->archivo = fopen(path.toStdString().c_str(),"rb+");
+
+    vector <metaCampos> mistablas;
 
     masterBloque master = leerMasterBloque(master);
 
     metaCampos readStruct;
 
-    fseek(archivo,12,SEEK_SET);
+   // fseek(archivo,12,SEEK_SET);
+    fseek(archivo,0,master.actual_metadata);
 
-    fread(&readStruct,sizeof(metaData),1,archivo);
-       // Lee el "Registro", de tamano=sizeof(registro) del archivo "alias"
+    int prox_libre;
 
-    /* qDebug () <<readStruct.cant_campos<<" cant campos"<<endl;
-     qDebug () <<"\n"<<readStruct.nom_tabla<<" nombre tabla"<<endl;
-     qDebug () <<readStruct.prox_libre<<" prox libre "<<endl;
-     qDebug () <<readStruct.pos_databloque<<" pos databloque"<<endl;
+    fread(&prox_libre,sizeof(int),1,archivo);
 
-    qDebug () << "ANTES DE LEER CAMPOS " << ftell (archivo);*/
+    qDebug() <<"PROXIM LIBRE " << prox_libre;
 
-    Campo campo;
+       int pos=56;
+       Campo campo;
 
-    for( int i = 0; i< readStruct.cant_campos; i++)
+       while(pos<prox_libre)
        {
-          //leerCampo(temp);
-          fread(&campo,sizeof(campo),1,archivo);
+        fread(&readStruct,sizeof(metaData),1,archivo);
 
-         // qDebug () << "CAMPO " << i+1 << ftell (archivo);
+        for( int i = 0; i< readStruct.cant_campos; i++)
+           {
+              //leerCampo(temp);
+              fread(&campo,sizeof(campo),1,archivo);
 
-          readStruct.campos.push_back(campo);
+              readStruct.campos.push_back(campo);
+           }
+          pos+=sizeof(metaData)+readStruct.cant_campos*sizeof(campo);
+
+          mistablas.push_back(readStruct);
        }
 
-    return readStruct;
+    return mistablas;
+}
+
+int miGestor::getProxMetadata()
+{
+    int prox_libre;
+    rewind(archivo);
+    masterBloque master;
+    fread(&master,sizeof(master),1,archivo);
+    fseek(archivo,0,master.actual_metadata);
+    fread(&prox_libre,sizeof(int),1,archivo);
+
+    return prox_libre;
 }
 
 void miGestor::escribirmetaData(metaData metadata)
 {
-    //Escribe los datos de la tabla, sus campos, nombr
-
-    if(this->archivo == NULL)
-      {
-        qDebug() <<"NULO";
-      }
-    else
-    {
          this->archivo = fopen(path.toStdString().c_str(),"rb+");
 
          masterBloque master = leerMasterBloque(master);
 
-         fseek(archivo,sizeof(master),SEEK_SET);
+         int prox_libre=getProxMetadata();
 
-         fwrite(&metadata,sizeof(metadata),1,archivo);
+            qDebug () <<prox_libre;
 
-         qDebug () << "metadata escrita en " << ftell (archivo);
+             fseek(archivo,prox_libre,SEEK_SET);
 
-         fflush(archivo);
+             fwrite(&metadata,sizeof(metadata),1,archivo);
 
-         metadata.imprimir();
-    }
+             int p_act=ftell (archivo);
 
+             qDebug () << "metadata escrita en " << ftell (archivo);
+
+            // fflush(archivo);
+
+               //ACTUALIZAR EL PROXIMO LIBRE
+             fseek(archivo,12,SEEK_SET);
+
+             fwrite(&p_act,sizeof(int),1,archivo);
+
+             qDebug () <<"pa_ct" << p_act;
+
+             fflush(archivo);
 }
 
 void miGestor::escribirCampo(Campo campo)
 {
     this->archivo = fopen(path.toStdString().c_str(),"rb+");
 
-  //  qDebug ()  << "POS EN CAMPO" << ftell(archivo);
+    int prox_libre=getProxMetadata();
 
-    fseek(archivo,0,SEEK_END);
+    qDebug () <<prox_libre <<"CAMPO";
+
+     fseek(archivo,prox_libre,SEEK_SET);
+     qDebug () <<ftell(archivo)<<"dpnde esta al escribir CAMPO";
 
     fwrite(&campo,sizeof(campo),1,archivo);
 
-    //qDebug () << "CAMPO " <<campo.nombre<<" escrito en " << ftell (archivo);
+    fseek(archivo,sizeof(campo),SEEK_CUR);
+
+    int p=prox_libre+sizeof(campo);
+
+    fseek(archivo,12,SEEK_SET);
+
+    fwrite(&p,sizeof(int),1,archivo);
+
+    qDebug () <<p <<"PACT COMPO";
 
     fflush(archivo);
+
 }
 
 void miGestor::leerCampo(Campo campo)

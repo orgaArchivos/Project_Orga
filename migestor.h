@@ -33,7 +33,8 @@ public:
     bool cerrarArchivo();
     masterBloque  leerMasterBloque(masterBloque master);
     void escribirMasterBloque(masterBloque master);
-    metaCampos leermetaData();
+    vector <metaCampos> leermetaData();
+    int getProxMetadata();
     void escribirmetaData(metaData metadata);
     void escribirCampo(Campo campo);
     void leerCampo(Campo campo);
