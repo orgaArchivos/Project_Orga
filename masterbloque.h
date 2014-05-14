@@ -19,10 +19,6 @@ public:
                        //puede ser tomado por cualquier tipo de bloque
     int primer_metadata;  //Dirección del primer bloque de METADATA
     int actual_metadata; //Dirección del bloque de METADATA actual (MDTBloque)
-
-   // setMasterBloque(masterBloque *nuevo);
-    masterBloque *getMasterBloque();
-
     masterBloque(int prox_libre,int primer_metadata,int actual_metadata);
     masterBloque();
 };

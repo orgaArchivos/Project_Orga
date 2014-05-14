@@ -25,17 +25,24 @@ void MainWindow::cargarTablas(metaCampos tablas)
     tablas.imprimir();
 
 //El evento que desplegará los datos de la tabla al hacer doble clic en el nombre
-    connect(ui->listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
-                this, SLOT(clickElemento()));
+    connect(ui->listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),this, SLOT(clickElemento()));
 }
 
 
 void MainWindow::clickElemento()
 {
-    QMessageBox *box = new QMessageBox();
-    box->setGeometry(200,200,200,200);
-    box->setText("LOL FUNCA!");
-    box->show();
+    metaCampos tablas =  this->gestor.leermetaData();
+    ui->tableWidget_2->clear();
+
+    for(int i = 0; i < tablas.cant_campos ; i++)
+    {
+     ui->tableWidget_2->insertColumn(i);
+     QTableWidgetItem* qtwi = new QTableWidgetItem(QString(Campo(tablas.campos.at(i)).nombre),QTableWidgetItem::Type);
+     ui->tableWidget_2->setHorizontalHeaderItem(i,qtwi);
+    }
+
+    const int ultima_fila = ui->tableWidget_2->rowCount();
+    ui->tableWidget_2->insertRow(ultima_fila);
 }
 
 void MainWindow::on_actionNuevo_Archivo_triggered()
@@ -53,7 +60,10 @@ void MainWindow::on_actionNuevo_Archivo_triggered()
                     this->ui->menuCrear->setEnabled(true);
 
                     //Inicializa el archivo con la primera información necesaria.
-                    masterBloque master(sizeof(master),sizeof(master),sizeof(master));
+                    masterBloque master;
+                    master.actual_metadata= sizeof(master);
+                    master.primer_metadata= sizeof(master);
+                    master.prox_libre= sizeof(master);
                     this->gestor.escribirMasterBloque(master);
 
                 }else{
@@ -158,9 +168,11 @@ void MainWindow::on_actionCrear_Registro_triggered()
 void MainWindow::on_actionCrear_Tabla_triggered()
 {
        bool ok;
+     //  do{
        QString nombre = QInputDialog::getText(this, tr("Nombre de la tabla"),
                                             tr("Guardar como:"), QLineEdit::Normal,
                                             "", &ok);
+
 
        this->metaTemp.prox_libre = sizeof(metaTemp);
 
@@ -192,7 +204,6 @@ void MainWindow::on_actionCrear_Tabla_triggered()
 
       const int ultima_fila = ui->tableWidget->rowCount();
       ui->tableWidget->insertRow(ultima_fila);
-
       ui->tableWidget->setCellWidget(i,1,mi_combo);
       ui->tableWidget->setCellWidget(i,2,mi_check);
     }
@@ -309,4 +320,37 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 void MainWindow::on_tabWidget_windowIconTextChanged(const QString &iconText)
 {
 
+}
+
+void MainWindow::on_pushButton_4_clicked()
+{
+    const int ultima_fila = ui->tableWidget_2->rowCount();
+    ui->tableWidget_2->insertRow(ultima_fila);
+}
+
+void MainWindow::on_pushButton_5_clicked()
+{
+    int iRows = ui->tableWidget_2->rowCount();
+    int col = ui->tableWidget_2->columnCount();
+
+    for(int i = 0; i < iRows; ++i)
+    {
+      for(int j = 0; j < col; ++j)
+      {
+          QAbstractItemModel* model = ui->tableWidget_2->model();
+          QModelIndex idx = model->index(i,j);
+         //Sacar en string el nombre del campo
+          QString str1 = model->data(idx).toString();
+
+         cout <<str1.toStdString() << " ";
+      }
+    }
+
+    //Limpiar la qTableWidget, si los datos fueron guardados correctamente y si cumplen las validaciones
+    for(int i=0; i < iRows; i++)
+    {
+        const int ultima_fila = ui->tableWidget_2->rowCount();
+        ui->tableWidget_2->removeRow(ultima_fila-1);
+
+    }
 }
