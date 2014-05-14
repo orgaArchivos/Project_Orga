@@ -35,14 +35,15 @@ public:
     void escribirMasterBloque(masterBloque master);
     vector <metaCampos> leermetaData();
     int getProxMetadata();
+    int getProxData();
     void escribirmetaData(metaData metadata);
     void escribirCampo(Campo campo);
     void leerCampo(Campo campo);
-    void leerdataBloque(DATABloque data);
-    void escribirdataBloque(DATABloque data);
+    char* leerdataBloque();
+    void escribirdataBloque(const char *dato,int largo);
+    void formarArray(char *bytearray, string info, int pos, int largo);
     long int posPuntero();
     void ByteArrayToMetadata(char * byteArray, int &byteArrayLen, int pos, metaData &readStruct, Campo &temp);
-
 
     FILE *archivo;
     QString path;

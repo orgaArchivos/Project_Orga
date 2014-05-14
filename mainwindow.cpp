@@ -23,7 +23,6 @@ void MainWindow::cargarTablas(vector<metaCampos> tablas)
     for(std::size_t i=0;i<tablas.size();++i)
       {
         ui->listWidget->addItem(metaCampos(tablas.at(i)).nom_tabla);
-        metaCampos(tablas.at(i)).imprimir();
       }
 
 //El evento que desplegará los datos de la tabla al hacer doble clic en el nombre
@@ -34,25 +33,54 @@ void MainWindow::cargarTablas(vector<metaCampos> tablas)
 
 void MainWindow::clickElemento()
 {
-    ui->tableWidget_2->clear();
 
+   ui->tableWidget_2->clear();
+
+   for(int i = 0; i < ui->tableWidget_2->columnCount(); i++)
+    {
+        const int ultima_fila = ui->tableWidget_2->columnCount();
+        ui->tableWidget_2->removeColumn(ultima_fila-1);
+    }
+
+    for(int i=0; i < ui->tableWidget_2->rowCount(); i++)
+    {
+        const int ultima_fila = ui->tableWidget_2->rowCount();
+        ui->tableWidget_2->removeRow(ultima_fila-1);
+    }
+
+    for(int i = 0; i < ui->tableWidget_2->columnCount(); i++)
+     {
+        for(int j = 0; j < ui->tableWidget_2->columnCount(); j++)
+         {
+            ui->tableWidget_2->removeCellWidget(i,j);
+         }
+     }
     int index_clic = ui->listWidget->currentRow();
 
     vector<metaCampos> tablas =  this->gestor.leermetaData();
 
     metaCampos elegida =  metaCampos(tablas.at(index_clic));
 
-    elegida.imprimir();
-
-  /*  for(int i = 0; i < elegida.cant_campos ; i++)
+    //ui->tableWidget_2->repaint();
+  //  ui->tableWidget_2->reset();
+    for(int i = 0; i < elegida.cant_campos ; i++)
     {
-     ui->tableWidget_2->insertColumn(i);
-     QTableWidgetItem* qtwi = new QTableWidgetItem(QString(Campo(elegida.campos.at(i)).nombre),QTableWidgetItem::Type);
-     ui->tableWidget_2->setHorizontalHeaderItem(i,qtwi);
+      ui->tableWidget_2->insertColumn(i);
+      QTableWidgetItem* qtwi = new QTableWidgetItem(QString(Campo(elegida.campos.at(i)).nombre),QTableWidgetItem::Type);
+      ui->tableWidget_2->setHorizontalHeaderItem(i,qtwi);
     }
 
-    const int ultima_fila = ui->tableWidget_2->rowCount();
-    ui->tableWidget_2->insertRow(ultima_fila);*/
+   const int ultima_fila = ui->tableWidget_2->rowCount();
+   ui->tableWidget_2->insertRow(ultima_fila);
+
+   ui->pushButton_4->setEnabled(true);
+   ui->pushButton_5->setEnabled(true);
+   ui->pushButton_6->setEnabled(true);
+   ui->actionCrear_Registro->setEnabled(true);
+
+   int  p=this->gestor.getProxData();
+   if(p > 4116)
+     this->gestor.leerdataBloque();
 }
 
 void MainWindow::on_actionNuevo_Archivo_triggered()
@@ -71,9 +99,9 @@ void MainWindow::on_actionNuevo_Archivo_triggered()
 
                     //Inicializa el archivo con la primera información necesaria.
                     masterBloque master;
-                    master.actual_metadata= sizeof(master);
-                    master.primer_metadata= sizeof(master);
-                    master.prox_libre= sizeof(master);
+                    master.actual_metadata= sizeof(master)+4;
+                    master.primer_metadata= sizeof(master)+4;
+                    master.prox_libre= sizeof(master)+4;
 
 
                     this->gestor.escribirMasterBloque(master);
@@ -113,14 +141,17 @@ void MainWindow::on_actionAbrir_Archivo_triggered()
 
                   fseek(this->gestor.archivo, 0, SEEK_END); // Colocar el cursor al final del ficher
                   int tamanio = ftell(this->gestor.archivo);
-                  qDebug ()  << "TAMAÑO: " <<tamanio <<endl;
-
+                 // qDebug ()  << "TAMAÑO: " <<tamanio <<endl;
 
                   if(tamanio > 16)
                   {
                       vector <metaCampos> tablas =  this->gestor.leermetaData();
                       cargarTablas(tablas);
                   }
+
+                  ui->actionCrear_Registro->setEnabled(false);
+                  ui->actionCrear_Campo->setEnabled(false);
+                  ui->actionCrear_Tabla->setEnabled(false);
 
 
              }else{
@@ -166,13 +197,15 @@ void MainWindow::on_actionSalir_triggered()
 //Encargado de crear un nuevo campo
 void MainWindow::on_actionCrear_Campo_triggered()
 {
-
+    const int ultima_fila = ui->tableWidget->rowCount();
+    ui->tableWidget->insertRow(ultima_fila);
 }
 
 //Encargado de insertar un nuevo registro al archivo
 void MainWindow::on_actionCrear_Registro_triggered()
 {
-
+    const int ultima_fila = ui->tableWidget_2->rowCount();
+    ui->tableWidget_2->insertRow(ultima_fila);
 }
 
 void MainWindow::on_actionCrear_Tabla_triggered()
@@ -216,6 +249,7 @@ void MainWindow::on_actionCrear_Tabla_triggered()
     ui->pushButton->setEnabled(true);
     ui->pushButton_2->setEnabled(true);
     ui->pushButton_3->setEnabled(true);
+    ui->actionCrear_Campo->setEnabled(true);
 
 }
 
@@ -302,6 +336,16 @@ void MainWindow::on_pushButton_3_clicked()
        this->on_pushButton_2_clicked();
     }
 
+    fseek(this->gestor.archivo,4112,SEEK_SET);
+     //escribir el proximo libre de la data
+    int pos = 4116;
+
+    qDebug () << "Antes ini"<< ftell(this->gestor.archivo);
+
+    fwrite(&pos,sizeof(int),1,this->gestor.archivo);
+
+    qDebug () <<" Despues ini"<<ftell(this->gestor.archivo);
+
 }
 
 void MainWindow::on_tabWidget_currentChanged(int index)
@@ -309,20 +353,15 @@ void MainWindow::on_tabWidget_currentChanged(int index)
     if(ui->tabWidget->currentIndex() == 0 )
     {
        ui->actionCrear_Tabla->setEnabled(true);
-       ui->actionCrear_Campo->setEnabled(false);
+       //ui->actionCrear_Campo->setEnabled(false);
        ui->actionCrear_Registro->setEnabled(false);
     }
     if(ui->tabWidget->currentIndex() == 1 )
     {
         ui->actionCrear_Tabla->setEnabled(false);
-        ui->actionCrear_Campo->setEnabled(true);
-        ui->actionCrear_Registro->setEnabled(true);
+        ui->actionCrear_Campo->setEnabled(false);
+        ui->actionCrear_Registro->setEnabled(false);
     }
-
-}
-
-void MainWindow::on_tabWidget_windowIconTextChanged(const QString &iconText)
-{
 
 }
 
@@ -345,8 +384,11 @@ void MainWindow::on_pushButton_5_clicked()
           QModelIndex idx = model->index(i,j);
          //Sacar en string el nombre del campo
           QString str1 = model->data(idx).toString();
+          cout <<str1.toStdString() << " ";
+          const char *dato;
+           dato = str1.toStdString().c_str();
 
-         cout <<str1.toStdString() << " ";
+          this->gestor.escribirdataBloque(dato,30);
       }
     }
 

@@ -7,7 +7,6 @@ void metaData::imprimir()
       qDebug () <<"CANT CAMPOS "<<this->cant_campos;
 }
 
-
 metaData::metaData()
 {
 }
