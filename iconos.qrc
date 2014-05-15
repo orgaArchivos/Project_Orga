@@ -8,5 +8,7 @@
         <file>iconos/open.png</file>
         <file>iconos/cerra.png</file>
         <file>iconos/cerrar.png</file>
+        <file>iconos/app.png</file>
+        <file>iconos/play.png</file>
     </qresource>
 </RCC>
