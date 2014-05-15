@@ -1,5 +1,9 @@
 <RCC>
     <qresource prefix="/">
         <file>iconos/Database 2.ico</file>
+        <file>iconos/agregar.png</file>
+        <file>iconos/buscar.png</file>
+        <file>iconos/eliminar.png</file>
+        <file>iconos/save.png</file>
     </qresource>
 </RCC>
