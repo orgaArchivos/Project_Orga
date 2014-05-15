@@ -28,7 +28,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -354,21 +354,37 @@
    <property name="enabled">
     <bool>false</bool>
    </property>
+   <property name="icon">
+    <iconset resource="iconos.qrc">
+     <normaloff>:/iconos/agregar.png</normaloff>:/iconos/agregar.png</iconset>
+   </property>
    <property name="text">
     <string>Crear Tabla</string>
    </property>
   </action>
   <action name="actionCrear_Campo">
+   <property name="icon">
+    <iconset resource="iconos.qrc">
+     <normaloff>:/iconos/agregar.png</normaloff>:/iconos/agregar.png</iconset>
+   </property>
    <property name="text">
     <string>Crear Campo</string>
    </property>
   </action>
   <action name="actionCrear_Registro">
+   <property name="icon">
+    <iconset resource="iconos.qrc">
+     <normaloff>:/iconos/agregar.png</normaloff>:/iconos/agregar.png</iconset>
+   </property>
    <property name="text">
     <string>Crear Registro</string>
    </property>
   </action>
   <action name="actionAbrir_Archivo">
+   <property name="icon">
+    <iconset resource="iconos.qrc">
+     <normaloff>:/iconos/open.png</normaloff>:/iconos/open.png</iconset>
+   </property>
    <property name="text">
     <string>Abrir Archivo</string>
    </property>
@@ -379,21 +395,37 @@
    </property>
   </action>
   <action name="actionNuevo_Archivo">
+   <property name="icon">
+    <iconset resource="iconos.qrc">
+     <normaloff>:/iconos/agregar.png</normaloff>:/iconos/agregar.png</iconset>
+   </property>
    <property name="text">
     <string>Nuevo Archivo</string>
    </property>
   </action>
   <action name="actionCerrar_Archivo">
+   <property name="icon">
+    <iconset resource="iconos.qrc">
+     <normaloff>:/iconos/cerrar.png</normaloff>:/iconos/cerrar.png</iconset>
+   </property>
    <property name="text">
     <string>Cerrar Archivo</string>
    </property>
   </action>
   <action name="actionGuardar">
+   <property name="icon">
+    <iconset resource="iconos.qrc">
+     <normaloff>:/iconos/save.png</normaloff>:/iconos/save.png</iconset>
+   </property>
    <property name="text">
     <string>Guardar</string>
    </property>
   </action>
   <action name="actionSalir">
+   <property name="icon">
+    <iconset resource="iconos.qrc">
+     <normaloff>:/iconos/cerra.png</normaloff>:/iconos/cerra.png</iconset>
+   </property>
    <property name="text">
     <string>Salir</string>
    </property>

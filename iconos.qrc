@@ -5,5 +5,8 @@
         <file>iconos/buscar.png</file>
         <file>iconos/eliminar.png</file>
         <file>iconos/save.png</file>
+        <file>iconos/open.png</file>
+        <file>iconos/cerra.png</file>
+        <file>iconos/cerrar.png</file>
     </qresource>
 </RCC>
