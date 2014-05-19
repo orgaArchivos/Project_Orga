@@ -55,6 +55,7 @@ void MainWindow::clickElemento()
          }
      }
     int index_clic = ui->listWidget->currentRow();
+    this->act_tabla = index_clic;
 
     vector<metaCampos> tablas =  this->gestor.leermetaData();
 
@@ -78,11 +79,24 @@ void MainWindow::clickElemento()
 
     vector <datas> info =this->gestor.leerdataBloque();
 
+    cout << " SIZE " << info.size();
+
     for (int i = 0; i< info.size(); i++)
     {
-        cout<<datas(info.at(i)).datos <<" "<< datas(info.at(i)).tamano<<endl;
-    }
+            QTableWidgetItem *setdes = new QTableWidgetItem;
 
+            setdes->setText(datas(info.at(i)).datos);
+
+            cout <<i<<endl;
+
+            if(datas(info.at(i)).tabla == this->act_tabla)
+            {
+                ui->tableWidget_2->setItem(0,i,setdes);
+
+                cout <<datas(info.at(i)).datos<<endl;
+            }
+             ui->tableWidget_2->insertRow(ui->tableWidget_2->rowCount() );
+    }
 
 }
 
@@ -342,18 +356,17 @@ void MainWindow::on_pushButton_3_clicked()
      //escribir el proximo libre de la data
     int pos = 4116;
 
-    qDebug () << "Antes ini"<< ftell(this->gestor.archivo);
+   // qDebug () << "Antes ini"<< ftell(this->gestor.archivo);
 
     fwrite(&pos,sizeof(int),1,this->gestor.archivo);
 
-    qDebug () <<" Despues ini"<<ftell(this->gestor.archivo);
+ //   qDebug () <<" Despues ini"<<ftell(this->gestor.archivo);
 
     fclose(this->gestor.archivo);
     this->gestor.abrirArchivo(this->path);
 
-        vector <metaCampos> tablas =  this->gestor.leermetaData();
-        cargarTablas(tablas);
-
+    vector <metaCampos> tablas =  this->gestor.leermetaData();
+    cargarTablas(tablas);
 
 }
 
@@ -371,7 +384,6 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         ui->actionCrear_Campo->setEnabled(false);
         ui->actionCrear_Registro->setEnabled(false);
     }
-
 }
 
 void MainWindow::on_pushButton_4_clicked()
@@ -396,9 +408,9 @@ void MainWindow::on_pushButton_5_clicked()
 
           datas datos;
 
-          //char dato [30];
           strcpy(datos.datos, str1.toStdString().c_str());
           datos.tamano = str1.length();
+          datos.tabla = this->act_tabla;
 
           this->gestor.escribirdataBloque(datos);
       }

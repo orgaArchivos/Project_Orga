@@ -5,6 +5,7 @@ class datas
 {
 public:
     int tamano;
+    int tabla;
     char datos[30];
     datas();
 };

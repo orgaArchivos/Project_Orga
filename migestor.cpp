@@ -126,8 +126,8 @@ int miGestor::getProxData()
 
         fread(&prox_libre,sizeof(int),1,archivo);
 
-        qDebug () <<"prx libre ftell " << ftell(archivo);
-        qDebug () <<"prx libre fun " << prox_libre;
+       //   qDebug () <<"prx libre ftell " << ftell(archivo);
+       // qDebug () <<"prx libre fun " << prox_libre;
 
         return prox_libre;
 }
@@ -155,7 +155,7 @@ void miGestor::escribirmetaData(metaData metadata)
 
              fwrite(&p_act,sizeof(int),1,archivo);
 
-             qDebug () <<"pa_ct" << p_act;
+         //    qDebug () <<"pa_ct" << p_act;
 
              fflush(archivo);
 }
@@ -169,7 +169,7 @@ void miGestor::escribirCampo(Campo campo)
     qDebug () <<prox_libre <<"CAMPO";
 
      fseek(archivo,prox_libre,SEEK_SET);
-     qDebug () <<ftell(archivo)<<"donde esta al escribir CAMPO";
+//     qDebug () <<ftell(archivo)<<"donde esta al escribir CAMPO";
 
     fwrite(&campo,sizeof(campo),1,archivo);
 
@@ -181,7 +181,7 @@ void miGestor::escribirCampo(Campo campo)
 
     fwrite(&p,sizeof(int),1,archivo);
 
-    qDebug () <<p <<"PACT COMPO";
+  //  qDebug () <<p <<"PACT COMPO";
 
     fflush(archivo);
 
@@ -206,10 +206,10 @@ vector <datas>  miGestor::leerdataBloque()
     {
         datas datos;
 
-        qDebug () << " empezando "<<ftell(archivo);
+        //qDebug () << " empezando "<<ftell(archivo);
         fread(&datos,sizeof(datos),1,archivo);
 
-        qDebug () << " dato "<<ftell(archivo);
+    //    qDebug () << " dato "<<ftell(archivo);
         i+=sizeof(datos);
        // cout  << "dato " << datos.datos;
        // cout  << " Largo " << datos.tamano <<endl;
@@ -223,8 +223,6 @@ vector <datas>  miGestor::leerdataBloque()
 void miGestor::escribirdataBloque( datas datos)
 {
      this->archivo = fopen(path.toStdString().c_str(),"rb+");
-
-     qDebug () <<"abierto";
 
      int prox_libre = getProxData();
 
@@ -240,6 +238,8 @@ void miGestor::escribirdataBloque( datas datos)
       qDebug () << " DATOS "<<datos.datos;
 
       qDebug () << " TAMANIO "<< datos.tamano;
+      qDebug () << " TABLA "<< datos.tabla;
+
 
    //actualizar prox_libre del char * de data
      fseek(archivo,4112,SEEK_SET);

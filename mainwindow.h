@@ -48,6 +48,7 @@ private:
     miGestor gestor;
     QString path;
     metaData metaTemp;
+    int act_tabla;
 
 private slots:
     void on_actionNuevo_Archivo_triggered();
