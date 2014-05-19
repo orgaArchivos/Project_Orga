@@ -6,6 +6,7 @@
 #include "databloque.h"
 #include "campo.h"
 #include "migestor.h"
+#include "datas.h"
 #include <stdio.h>
 #include <iostream>
 #include <ctype.h>

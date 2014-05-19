@@ -80,8 +80,6 @@ vector <metaCampos> miGestor::leermetaData()
 
     fread(&prox_libre,sizeof(int),1,archivo);
     int pos = ftell(archivo);
-   // qDebug() <<"pos lee 2 " << pos;
-    //qDebug() <<"PROXIM LIBRE " << prox_libre;
 
        while(pos<prox_libre)
        {
@@ -91,10 +89,6 @@ vector <metaCampos> miGestor::leermetaData()
         pos+=sizeof(metaData);
         fseek(archivo,pos,SEEK_SET);
 
-       /* qDebug() <<"POSICION " << pos;
-        qDebug() <<"Cant camp " << readStruct.cant_campos;
-        qDebug() <<"nom " << readStruct.nom_tabla;*/
-
         for( int i = 0; i< readStruct.cant_campos; i++)
            {
               Campo campo;
@@ -103,11 +97,7 @@ vector <metaCampos> miGestor::leermetaData()
               readStruct.campos.push_back(campo);
 
                pos+=sizeof(campo);
-           //   qDebug() <<"Pos des campos "<<i << pos;
            }
-
-         // qDebug() <<"Pos des campos " << pos;
-                  //sizeof(metaData)+readStruct.cant_campos*sizeof(campo);
 
           mistablas.push_back(readStruct);
        }
@@ -129,11 +119,14 @@ int miGestor::getProxMetadata()
 
 int miGestor::getProxData()
 {
+        this->archivo = fopen(path.toStdString().c_str(),"rb+");
         int prox_libre;
-        fseek(archivo,4112,SEEK_SET);
+
+        fseek(this->archivo,4112,SEEK_SET);
+
         fread(&prox_libre,sizeof(int),1,archivo);
 
-        qDebug () <<"prx libre fun " << ftell(archivo);
+        qDebug () <<"prx libre ftell " << ftell(archivo);
         qDebug () <<"prx libre fun " << prox_libre;
 
         return prox_libre;
@@ -176,7 +169,7 @@ void miGestor::escribirCampo(Campo campo)
     qDebug () <<prox_libre <<"CAMPO";
 
      fseek(archivo,prox_libre,SEEK_SET);
-     qDebug () <<ftell(archivo)<<"dpnde esta al escribir CAMPO";
+     qDebug () <<ftell(archivo)<<"donde esta al escribir CAMPO";
 
     fwrite(&campo,sizeof(campo),1,archivo);
 
@@ -199,36 +192,35 @@ void miGestor::leerCampo(Campo campo)
     fread(&campo,sizeof(campo),1,archivo);
 }
 
-char * miGestor::leerdataBloque()
+vector <datas>  miGestor::leerdataBloque()
 {
-
     this->archivo = fopen(path.toStdString().c_str(),"rb+");
-
-    fseek(archivo,(4096+16+4),SEEK_SET);
 
     int prox_libre = getProxData();
 
     fseek(archivo,4116,SEEK_SET);
 
+    vector <datas> info;
+
     for( int i= 4116; i< prox_libre; i++)
     {
-        int largo;
-        char dato[30];
+        datas datos;
+
         qDebug () << " empezando "<<ftell(archivo);
-        fread(&largo,sizeof(int),1,archivo);
-         qDebug () << " largo "<<ftell(archivo);
-         i+=sizeof(int);
-        fread(&dato,largo,1,archivo);
-          qDebug () << " dato "<<ftell(archivo);
-           i+=30;
-        cout  << "dato " << dato <<endl;
-        cout  << " Largo " << largo <<endl;
+        fread(&datos,sizeof(datos),1,archivo);
+
+        qDebug () << " dato "<<ftell(archivo);
+        i+=sizeof(datos);
+       // cout  << "dato " << datos.datos;
+       // cout  << " Largo " << datos.tamano <<endl;
+
+        info.push_back(datos);
     }
 
-    return NULL;
+    return info;
 }
 
-void miGestor::escribirdataBloque(const char *dato,int largo)
+void miGestor::escribirdataBloque( datas datos)
 {
      this->archivo = fopen(path.toStdString().c_str(),"rb+");
 
@@ -240,18 +232,18 @@ void miGestor::escribirdataBloque(const char *dato,int largo)
 
      qDebug () <<"prox libre " << prox_libre;
 
-  //   memcpy ( &datos[prox_libre], &dato, largo );
-     fwrite(&largo,prox_libre,1,archivo);
-     qDebug () << " largo "<<ftell(archivo) << largo;
-     prox_libre+=sizeof(int);
-     fwrite(&dato,prox_libre,1,archivo);
-     qDebug () << " dato "<<ftell(archivo);
+     fwrite(&datos,sizeof(datos),1,archivo);
 
-     cout << dato;
+     qDebug () << " DESPUES DATOS "<<ftell(archivo) ;
+     prox_libre+=sizeof(datos);
+
+      qDebug () << " DATOS "<<datos.datos;
+
+      qDebug () << " TAMANIO "<< datos.tamano;
+
    //actualizar prox_libre del char * de data
      fseek(archivo,4112,SEEK_SET);
 
-     prox_libre+=largo;
      qDebug () <<"actualizar prox libre " << prox_libre;
 
      fwrite(&prox_libre,sizeof(int),1,archivo);

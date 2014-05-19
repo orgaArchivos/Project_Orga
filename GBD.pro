@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     migestor.cpp \
     metadata.cpp \
     campo.cpp \
-    metacampos.cpp
+    metacampos.cpp \
+    datas.cpp
 
 HEADERS  += mainwindow.h \
     masterbloque.h \
@@ -29,7 +30,8 @@ HEADERS  += mainwindow.h \
     migestor.h \
     metadata.h \
     campo.h \
-    metacampos.h
+    metacampos.h \
+    datas.h
 
 FORMS    += mainwindow.ui
 

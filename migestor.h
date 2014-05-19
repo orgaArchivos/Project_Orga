@@ -7,6 +7,7 @@
 #include "metadata.h"
 #include "metacampos.h"
 #include "databloque.h"
+#include "datas.h"
 #include <stdio.h>
 #include <iostream>
 #include <ctype.h>
@@ -39,8 +40,8 @@ public:
     void escribirmetaData(metaData metadata);
     void escribirCampo(Campo campo);
     void leerCampo(Campo campo);
-    char* leerdataBloque();
-    void escribirdataBloque(const char *dato,int largo);
+    vector<datas> leerdataBloque();
+    void escribirdataBloque(datas datos);
     void formarArray(char *bytearray, string info, int pos, int largo);
     long int posPuntero();
     void ByteArrayToMetadata(char * byteArray, int &byteArrayLen, int pos, metaData &readStruct, Campo &temp);

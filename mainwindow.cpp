@@ -25,15 +25,14 @@ void MainWindow::cargarTablas(vector<metaCampos> tablas)
         ui->listWidget->addItem(metaCampos(tablas.at(i)).nom_tabla);
       }
 
-//El evento que desplegará los datos de la tabla al hacer doble clic en el nombre
     connect(ui->listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),this, SLOT(clickElemento()));
-   // connect(ui->listWidget, SIGNAL((QListWidgetItem*)),this, SLOT(clickElemento()));
+
 }
 
 
 void MainWindow::clickElemento()
 {
-
+   this->gestor.cerrarArchivo();
    ui->tableWidget_2->clear();
 
    for(int i = 0; i < ui->tableWidget_2->columnCount(); i++)
@@ -61,8 +60,6 @@ void MainWindow::clickElemento()
 
     metaCampos elegida =  metaCampos(tablas.at(index_clic));
 
-    //ui->tableWidget_2->repaint();
-  //  ui->tableWidget_2->reset();
     for(int i = 0; i < elegida.cant_campos ; i++)
     {
       ui->tableWidget_2->insertColumn(i);
@@ -78,9 +75,15 @@ void MainWindow::clickElemento()
    ui->pushButton_6->setEnabled(true);
    ui->actionCrear_Registro->setEnabled(true);
 
-   int  p=this->gestor.getProxData();
-   if(p > 4116)
-     this->gestor.leerdataBloque();
+
+    vector <datas> info =this->gestor.leerdataBloque();
+
+    for (int i = 0; i< info.size(); i++)
+    {
+        cout<<datas(info.at(i)).datos <<" "<< datas(info.at(i)).tamano<<endl;
+    }
+
+
 }
 
 void MainWindow::on_actionNuevo_Archivo_triggered()
@@ -103,7 +106,6 @@ void MainWindow::on_actionNuevo_Archivo_triggered()
                     master.primer_metadata= sizeof(master)+4;
                     master.prox_libre= sizeof(master)+4;
 
-
                     this->gestor.escribirMasterBloque(master);
 
                 }else{
@@ -125,7 +127,7 @@ void MainWindow::on_actionAbrir_Archivo_triggered()
     switch (ret) {
        case QMessageBox::Yes:
     {
-        //fclose(archivo);
+
          QString filename = QFileDialog::getOpenFileName(this, tr("Abrir archivo"), QDir::currentPath(),  tr("Archivos (*.gbd)") );
          this->path = filename;
          this->gestor.path = filename;
@@ -346,6 +348,13 @@ void MainWindow::on_pushButton_3_clicked()
 
     qDebug () <<" Despues ini"<<ftell(this->gestor.archivo);
 
+    fclose(this->gestor.archivo);
+    this->gestor.abrirArchivo(this->path);
+
+        vector <metaCampos> tablas =  this->gestor.leermetaData();
+        cargarTablas(tablas);
+
+
 }
 
 void MainWindow::on_tabWidget_currentChanged(int index)
@@ -384,11 +393,14 @@ void MainWindow::on_pushButton_5_clicked()
           QModelIndex idx = model->index(i,j);
          //Sacar en string el nombre del campo
           QString str1 = model->data(idx).toString();
-          cout <<str1.toStdString() << " ";
-          const char *dato;
-           dato = str1.toStdString().c_str();
 
-          this->gestor.escribirdataBloque(dato,30);
+          datas datos;
+
+          //char dato [30];
+          strcpy(datos.datos, str1.toStdString().c_str());
+          datos.tamano = str1.length();
+
+          this->gestor.escribirdataBloque(datos);
       }
     }
 
