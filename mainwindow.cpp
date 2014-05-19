@@ -9,7 +9,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
 }
 
 MainWindow::~MainWindow()
@@ -33,18 +32,16 @@ void MainWindow::cargarTablas(vector<metaCampos> tablas)
 void MainWindow::clickElemento()
 {
    this->gestor.cerrarArchivo();
-   ui->tableWidget_2->clear();
+       ui->tableWidget_2->AdjustToContents;
 
    for(int i = 0; i < ui->tableWidget_2->columnCount(); i++)
     {
-        const int ultima_fila = ui->tableWidget_2->columnCount();
-        ui->tableWidget_2->removeColumn(ultima_fila-1);
+          ui->tableWidget_2->model()->removeColumns(i,ui->tableWidget_2->columnCount());
     }
 
     for(int i=0; i < ui->tableWidget_2->rowCount(); i++)
     {
-        const int ultima_fila = ui->tableWidget_2->rowCount();
-        ui->tableWidget_2->removeRow(ultima_fila-1);
+           ui->tableWidget_2->model()->removeRows(i,ui->tableWidget_2->rowCount());
     }
 
     for(int i = 0; i < ui->tableWidget_2->columnCount(); i++)
@@ -76,27 +73,49 @@ void MainWindow::clickElemento()
    ui->pushButton_6->setEnabled(true);
    ui->actionCrear_Registro->setEnabled(true);
 
-
     vector <datas> info =this->gestor.leerdataBloque();
 
-    cout << " SIZE " << info.size();
+    vector<datas>::const_iterator it;
+    int i=0;
 
-    for (int i = 0; i< info.size(); i++)
+    for (it = info.begin(); it != info.end(); ++it) {
+        QTableWidgetItem *setdes = new QTableWidgetItem;
+
+        if( datas(*it).datos != "")
+         setdes->setText(datas(*it).datos);
+
+        //cout <<i<<endl;
+
+        if(datas(*it).tabla == this->act_tabla && setdes->text() != "" )
+        {
+            ui->tableWidget_2->setItem(0,i,setdes);
+
+            cout <<datas(*it).datos<<endl;
+        }
+        i+=1;
+        cout<<"ROWCONT " <<ui->tableWidget_2->rowCount()<< endl ;
+        ui->tableWidget_2->insertRow(ui->tableWidget_2->rowCount() );
+    }
+
+   /* for (int i = 0; i< info.size(); i++)
     {
+
             QTableWidgetItem *setdes = new QTableWidgetItem;
 
-            setdes->setText(datas(info.at(i)).datos);
+            if( datas(info.at(i)).datos != "")
+             setdes->setText(datas(info.at(i)).datos);
 
             cout <<i<<endl;
 
-            if(datas(info.at(i)).tabla == this->act_tabla)
+            if(datas(info.at(i)).tabla == this->act_tabla && setdes->text() != " " )
             {
                 ui->tableWidget_2->setItem(0,i,setdes);
 
                 cout <<datas(info.at(i)).datos<<endl;
             }
-             ui->tableWidget_2->insertRow(ui->tableWidget_2->rowCount() );
-    }
+
+            ui->tableWidget_2->insertRow(ui->tableWidget_2->rowCount() );
+    }*/
 
 }
 
