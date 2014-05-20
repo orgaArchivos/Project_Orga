@@ -9,6 +9,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->tableWidget->setColumnWidth(0,120);
+    ui->tableWidget->setColumnWidth(2,50);
 }
 
 MainWindow::~MainWindow()
@@ -23,6 +25,7 @@ void MainWindow::cargarTablas(vector<metaCampos> tablas)
       {
         ui->listWidget->addItem(metaCampos(tablas.at(i)).nom_tabla);
       }
+
 
     connect(ui->listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),this, SLOT(clickElemento()));
 
@@ -271,6 +274,9 @@ void MainWindow::on_actionCrear_Tabla_triggered()
       indices <<"SI"  <<"NO";
 
       mi_combo->addItems(tipos);
+      //mi_combo->setFixedSize(87,25);
+      mi_combo->setFixedHeight(25);
+      mi_combo->setFixedWidth(87);
 
       indice.append(mi_check);
       tipos_datos.append(mi_combo);
