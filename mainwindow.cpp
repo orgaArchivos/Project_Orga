@@ -11,6 +11,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->tableWidget->setColumnWidth(0,120);
     ui->tableWidget->setColumnWidth(2,50);
+    ui->pushButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_A));
+    ui->pushButton_2->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_D));
+    ui->pushButton_3->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_G));
+    ui->pushButton_4->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_N));
+    ui->pushButton_5->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_G));
+    ui->pushButton_6->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
+
+    ui->tabWidget->setCurrentIndex(0);
 }
 
 MainWindow::~MainWindow()
@@ -20,6 +28,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::cargarTablas(vector<metaCampos> tablas)
 {
+       ui->tableWidget_2->clearContents();
     ui->listWidget->clear();
     for(std::size_t i=0;i<tablas.size();++i)
       {
@@ -27,14 +36,16 @@ void MainWindow::cargarTablas(vector<metaCampos> tablas)
       }
 
 
-    connect(ui->listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),this, SLOT(clickElemento()));
+    connect(ui->listWidget, SIGNAL(itemClicked(QListWidgetItem*)),this, SLOT(clickElemento()));
 
 }
 
 
 void MainWindow::clickElemento()
 {
-   this->gestor.cerrarArchivo();
+
+    this->gestor.cerrarArchivo();
+
        ui->tableWidget_2->AdjustToContents;
 
    for(int i = 0; i < ui->tableWidget_2->columnCount(); i++)
@@ -119,7 +130,7 @@ void MainWindow::clickElemento()
 
             ui->tableWidget_2->insertRow(ui->tableWidget_2->rowCount() );
     }*/
-
+    ui->tableWidget_2->clearContents();
 }
 
 void MainWindow::on_actionNuevo_Archivo_triggered()
@@ -150,6 +161,7 @@ void MainWindow::on_actionNuevo_Archivo_triggered()
             }else{
                 QMessageBox::critical(this,"Error","Posiblemente no se creó su archivo");
             }
+       ui->tabWidget->setCurrentIndex(0);
 }
 
 //Encargado de cargar el contenido de un archivo fisico ya existente
@@ -191,6 +203,8 @@ void MainWindow::on_actionAbrir_Archivo_triggered()
                   ui->actionCrear_Campo->setEnabled(false);
                   ui->actionCrear_Tabla->setEnabled(false);
 
+                  //ui->tabWidget->setCurrentIndex(0);
+                  on_tabWidget_currentChanged();
 
              }else{
                  QMessageBox::critical(this,"Error","Error al abrir el archivo creado");
@@ -204,7 +218,7 @@ void MainWindow::on_actionAbrir_Archivo_triggered()
        default:
            // should never be reached
            break;
-     }
+    }
 }
 
 //Encargado de salvar todo el contenido que se ha escrito en los archivos
@@ -253,6 +267,7 @@ void MainWindow::on_actionCrear_Tabla_triggered()
        QString nombre = QInputDialog::getText(this, tr("Nombre de la tabla"),
                                             tr("Guardar como:"), QLineEdit::Normal,
                                             "", &ok);
+
 
        if (ok && !nombre.isEmpty())
        {
@@ -395,7 +410,7 @@ void MainWindow::on_pushButton_3_clicked()
 
 }
 
-void MainWindow::on_tabWidget_currentChanged(int index)
+void MainWindow::on_tabWidget_currentChanged()
 {
     if(ui->tabWidget->currentIndex() == 0 )
     {
@@ -403,7 +418,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
        //ui->actionCrear_Campo->setEnabled(false);
        ui->actionCrear_Registro->setEnabled(false);
     }
-    if(ui->tabWidget->currentIndex() == 1 )
+    else if(ui->tabWidget->currentIndex() == 1 )
     {
         ui->actionCrear_Tabla->setEnabled(false);
         ui->actionCrear_Campo->setEnabled(false);
@@ -415,6 +430,7 @@ void MainWindow::on_pushButton_4_clicked()
 {
     const int ultima_fila = ui->tableWidget_2->rowCount();
     ui->tableWidget_2->insertRow(ultima_fila);
+
 }
 
 void MainWindow::on_pushButton_5_clicked()

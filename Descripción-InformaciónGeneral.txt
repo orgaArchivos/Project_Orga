@@ -1,4 +1,4 @@
-Esta es la estructura de el proyecto y la explicación de cada clase en su orden:
+    Esta es la estructura de el proyecto y la explicación de cada clase en su orden:
 
 1. MASTERBLOQUE: Esta es la cabecera del archivo que nos contiene la información de el próximo espacio disponible en el archivo
    y también el primer bloque de METADATA y el actual, en caso de haber más de uno.

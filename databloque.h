@@ -1,4 +1,4 @@
-#ifndef DATABLOQUE_H
+ #ifndef DATABLOQUE_H
 #define DATABLOQUE_H
 #include <stdio.h>
 #include <iostream>
