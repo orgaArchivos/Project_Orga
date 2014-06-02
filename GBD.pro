@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     metadata.cpp \
     campo.cpp \
     metacampos.cpp \
-    datas.cpp
+    datas.cpp \
+    indiceshash.cpp
 
 HEADERS  += mainwindow.h \
     masterbloque.h \
@@ -31,7 +32,8 @@ HEADERS  += mainwindow.h \
     metadata.h \
     campo.h \
     metacampos.h \
-    datas.h
+    datas.h \
+    indiceshash.h
 
 FORMS    += mainwindow.ui
 
