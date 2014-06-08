@@ -42,6 +42,8 @@ public:
     void leerCampo(Campo campo);
     vector<datas> leerdataBloque();
     void escribirdataBloque(datas datos);
+    void escribirIndice();
+    void leerIndice();
     void formarArray(char *bytearray, string info, int pos, int largo);
     long int posPuntero();
     void ByteArrayToMetadata(char * byteArray, int &byteArrayLen, int pos, metaData &readStruct, Campo &temp);

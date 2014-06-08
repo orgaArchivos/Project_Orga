@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->pushButton_5->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_G));
     ui->pushButton_6->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
 
-    ui->tabWidget->setCurrentIndex(0);
+   // ui->tabWidget->setCurrentIndex(0);
 }
 
 MainWindow::~MainWindow()
@@ -28,13 +28,13 @@ MainWindow::~MainWindow()
 
 void MainWindow::cargarTablas(vector<metaCampos> tablas)
 {
-       ui->tableWidget_2->clearContents();
-    ui->listWidget->clear();
-    for(std::size_t i=0;i<tablas.size();++i)
+     ui->tableWidget_2->clearContents();
+     ui->listWidget->clear();
+
+     for(std::size_t i=0;i<tablas.size();++i)
       {
         ui->listWidget->addItem(metaCampos(tablas.at(i)).nom_tabla);
       }
-
 
     connect(ui->listWidget, SIGNAL(itemClicked(QListWidgetItem*)),this, SLOT(clickElemento()));
 
@@ -44,9 +44,9 @@ void MainWindow::cargarTablas(vector<metaCampos> tablas)
 void MainWindow::clickElemento()
 {
 
-    this->gestor.cerrarArchivo();
+   this->gestor.cerrarArchivo();
 
-       ui->tableWidget_2->AdjustToContents;
+   ui->tableWidget_2->AdjustToContents;
 
    for(int i = 0; i < ui->tableWidget_2->columnCount(); i++)
     {
@@ -76,6 +76,16 @@ void MainWindow::clickElemento()
     {
       ui->tableWidget_2->insertColumn(i);
       QTableWidgetItem* qtwi = new QTableWidgetItem(QString(Campo(elegida.campos.at(i)).nombre),QTableWidgetItem::Type);
+
+
+      if(Campo(elegida.campos.at(i)).indice == 1)
+      {
+          qDebug () <<Campo(elegida.campos.at(i)).nombre <<"  es indice, en la posicion " << i;
+          //Guardamos la posicion en la tabla del campo que es indice. Así podemos saber cual serán los datos
+          //de la tabla que guardaremos en el indice
+          this->act_index = i;
+      }
+
       ui->tableWidget_2->setHorizontalHeaderItem(i,qtwi);
     }
 
@@ -95,7 +105,7 @@ void MainWindow::clickElemento()
     for (it = info.begin(); it != info.end(); ++it) {
         QTableWidgetItem *setdes = new QTableWidgetItem;
 
-        if( datas(*it).datos != "")
+       // if( datas(*it).datos != " ")
          setdes->setText(datas(*it).datos);
 
         //cout <<i<<endl;
@@ -103,34 +113,14 @@ void MainWindow::clickElemento()
         if(datas(*it).tabla == this->act_tabla && setdes->text() != "" )
         {
             ui->tableWidget_2->setItem(0,i,setdes);
-
             cout <<datas(*it).datos<<endl;
+            cout <<this->act_tabla<<endl;
         }
         i+=1;
         cout<<"ROWCONT " <<ui->tableWidget_2->rowCount()<< endl ;
         ui->tableWidget_2->insertRow(ui->tableWidget_2->rowCount() );
     }
 
-   /* for (int i = 0; i< info.size(); i++)
-    {
-
-            QTableWidgetItem *setdes = new QTableWidgetItem;
-
-            if( datas(info.at(i)).datos != "")
-             setdes->setText(datas(info.at(i)).datos);
-
-            cout <<i<<endl;
-
-            if(datas(info.at(i)).tabla == this->act_tabla && setdes->text() != " " )
-            {
-                ui->tableWidget_2->setItem(0,i,setdes);
-
-                cout <<datas(info.at(i)).datos<<endl;
-            }
-
-            ui->tableWidget_2->insertRow(ui->tableWidget_2->rowCount() );
-    }*/
-    ui->tableWidget_2->clearContents();
 }
 
 void MainWindow::on_actionNuevo_Archivo_triggered()

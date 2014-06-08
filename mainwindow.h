@@ -49,6 +49,7 @@ private:
     QString path;
     metaData metaTemp;
     int act_tabla;
+    int act_index;
 
 private slots:
     void on_actionNuevo_Archivo_triggered();

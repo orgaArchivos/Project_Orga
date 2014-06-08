@@ -126,8 +126,6 @@ int miGestor::getProxData()
 
         fread(&prox_libre,sizeof(int),1,archivo);
 
-       //   qDebug () <<"prx libre ftell " << ftell(archivo);
-       // qDebug () <<"prx libre fun " << prox_libre;
 
         return prox_libre;
 }
@@ -249,6 +247,16 @@ void miGestor::escribirdataBloque( datas datos)
      fwrite(&prox_libre,sizeof(int),1,archivo);
 
      fflush(archivo);
+}
+
+void miGestor::escribirIndice()
+{
+
+}
+
+void miGestor::leerIndice()
+{
+
 }
 
 void miGestor::formarArray(char * bytearray,string info,int pos, int largo)

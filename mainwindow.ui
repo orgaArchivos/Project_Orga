@@ -28,7 +28,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -39,7 +39,7 @@
        <rect>
         <x>20</x>
         <y>10</y>
-        <width>771</width>
+        <width>701</width>
         <height>371</height>
        </rect>
       </property>
@@ -64,11 +64,6 @@
         <set>AlignHCenter|AlignVCenter|AlignCenter</set>
        </property>
       </column>
-      <column>
-       <property name="text">
-        <string>Longitud</string>
-       </property>
-      </column>
      </widget>
      <widget class="QPushButton" name="pushButton">
       <property name="enabled">
@@ -76,8 +71,8 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>650</x>
-        <y>70</y>
+        <x>490</x>
+        <y>110</y>
         <width>131</width>
         <height>51</height>
        </rect>
@@ -96,8 +91,8 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>650</x>
-        <y>130</y>
+        <x>490</x>
+        <y>170</y>
         <width>131</width>
         <height>51</height>
        </rect>
@@ -116,8 +111,8 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>650</x>
-        <y>190</y>
+        <x>490</x>
+        <y>230</y>
         <width>131</width>
         <height>51</height>
        </rect>
@@ -133,7 +128,7 @@
      <widget class="QFrame" name="frame">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>450</x>
         <y>40</y>
         <width>201</width>
         <height>331</height>
@@ -146,6 +141,11 @@
        <enum>QFrame::Raised</enum>
       </property>
      </widget>
+     <zorder>tableWidget</zorder>
+     <zorder>frame</zorder>
+     <zorder>pushButton_2</zorder>
+     <zorder>pushButton_3</zorder>
+     <zorder>pushButton</zorder>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
