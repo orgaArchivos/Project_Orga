@@ -8,6 +8,7 @@
 #include "metacampos.h"
 #include "databloque.h"
 #include "datas.h"
+#include "indice1.h"
 #include <stdio.h>
 #include <iostream>
 #include <ctype.h>
@@ -37,13 +38,17 @@ public:
     vector <metaCampos> leermetaData();
     int getProxMetadata();
     int getProxData();
+    int getProxInd();
+    int getCantTablas();
     void escribirmetaData(metaData metadata);
     void escribirCampo(Campo campo);
     void leerCampo(Campo campo);
     vector<datas> leerdataBloque();
     void escribirdataBloque(datas datos);
-    void escribirIndice();
-    void leerIndice();
+    void escribirIndice(int pos,indice1 ind);
+    void leerIndice(int pos);
+    void escribirTablas(int n);
+    void leerTablas();
     void formarArray(char *bytearray, string info, int pos, int largo);
     long int posPuntero();
     void ByteArrayToMetadata(char * byteArray, int &byteArrayLen, int pos, metaData &readStruct, Campo &temp);

@@ -7,6 +7,7 @@
 #include "campo.h"
 #include "migestor.h"
 #include "datas.h"
+#include "indice1.h"
 #include <stdio.h>
 #include <iostream>
 #include <ctype.h>

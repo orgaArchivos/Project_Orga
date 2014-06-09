@@ -83,8 +83,11 @@ void MainWindow::clickElemento()
           qDebug () <<Campo(elegida.campos.at(i)).nombre <<"  es indice, en la posicion " << i;
           //Guardamos la posicion en la tabla del campo que es indice. Así podemos saber cual serán los datos
           //de la tabla que guardaremos en el indice
-          this->act_index = i;
+
+          this->act_index = (i);
       }
+
+      //Sumamos uno, en adelante, será 1 = 8212; 2=12312; 3=16408 para this->act_tabla
 
       ui->tableWidget_2->setHorizontalHeaderItem(i,qtwi);
     }
@@ -144,6 +147,7 @@ void MainWindow::on_actionNuevo_Archivo_triggered()
                     master.prox_libre= sizeof(master)+4;
 
                     this->gestor.escribirMasterBloque(master);
+                    this->gestor.escribirTablas(1);
 
                 }else{
                     QMessageBox::critical(this,"Error","Error al abrir el archivo creado");
@@ -390,6 +394,13 @@ void MainWindow::on_pushButton_3_clicked()
 
     fwrite(&pos,sizeof(int),1,this->gestor.archivo);
 
+    fseek(this->gestor.archivo,8212,SEEK_SET);
+     //escribir el proximo libre de los indices
+    int pos2 = 8216;
+   // qDebug () << "Antes ini"<< ftell(this->gestor.archivo);
+
+    fwrite(&pos2,sizeof(int),1,this->gestor.archivo);
+
  //   qDebug () <<" Despues ini"<<ftell(this->gestor.archivo);
 
     fclose(this->gestor.archivo);
@@ -443,7 +454,35 @@ void MainWindow::on_pushButton_5_clicked()
           datos.tamano = str1.length();
           datos.tabla = this->act_tabla;
 
+          int pos = this->gestor.getProxData();
+
           this->gestor.escribirdataBloque(datos);
+
+         //se guardará en el indice solo si el indice de la tabla actual es igual a la columna
+          //de la tabla donde esta dicho campo llave
+          int p = 8216;
+
+          if(j == this->act_index)
+          {
+              for(int i=1;i<(act_tabla+1);i++)
+              {
+                  p+=4096;
+              }
+
+              qDebug () << "SE ESCRIBIRÁ EN " << p ;
+
+              indice1 ind ;
+
+              ind.pos_enarchivo = pos;
+            //  ind.valor_llave = datos.datos;
+              strcpy(ind.valor_llave, str1.toStdString().c_str());
+
+              this->gestor.escribirIndice(p,ind);
+
+              //Al mismo tiempo se deben ir escribiendo los indices de la tabla
+
+          }
+
       }
     }
 

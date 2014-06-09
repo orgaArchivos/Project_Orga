@@ -126,8 +126,31 @@ int miGestor::getProxData()
 
         fread(&prox_libre,sizeof(int),1,archivo);
 
-
         return prox_libre;
+}
+
+int miGestor::getProxInd()
+{
+    this->archivo = fopen(path.toStdString().c_str(),"rb+");
+    int prox_libre;
+
+    fseek(this->archivo,8212,SEEK_SET);
+
+    fread(&prox_libre,sizeof(int),1,archivo);
+
+    return prox_libre;
+}
+
+int miGestor::getCantTablas()
+{
+    this->archivo = fopen(path.toStdString().c_str(),"rb+");
+    int cant;
+
+    fseek(this->archivo,8212,SEEK_SET);
+
+    fread(&cant,sizeof(int),1,archivo);
+
+    return cant;
 }
 
 void miGestor::escribirmetaData(metaData metadata)
@@ -249,12 +272,43 @@ void miGestor::escribirdataBloque( datas datos)
      fflush(archivo);
 }
 
-void miGestor::escribirIndice()
+void miGestor::escribirIndice(int pos, indice1 ind)
+{
+    this->archivo = fopen(path.toStdString().c_str(),"rb+");
+
+   // int prox_libre = getProxData();
+
+    fseek(archivo,pos,SEEK_SET);
+
+    qDebug () <<"pos del indice " << pos;
+
+    fwrite(&ind,sizeof(ind),1,archivo);
+
+    qDebug () <<"pos en arch " << ind.pos_enarchivo;
+     qDebug () <<"contenido " << ind.valor_llave;
+
+
+    fflush(archivo);
+}
+
+void miGestor::leerIndice(int pos)
 {
 
 }
 
-void miGestor::leerIndice()
+void miGestor::escribirTablas(int n)
+{
+    //Para ir controlando la cantidad de tablas de el archivo y así poder asignarle el indice, su posicion en el archivo.
+    this->archivo = fopen(path.toStdString().c_str(),"rb+");
+
+    fseek(archivo,8212,SEEK_SET);
+
+    fwrite(&n,sizeof(int),1,archivo);
+
+    fflush(archivo);
+}
+
+void miGestor::leerTablas()
 {
 
 }
@@ -270,7 +324,6 @@ long miGestor::posPuntero()
 {
     return ftell(archivo);
 }
-
 
 
 miGestor::miGestor()
