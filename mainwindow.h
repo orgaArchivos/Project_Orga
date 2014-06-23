@@ -71,6 +71,7 @@ private slots:
     void on_tabWidget_currentChanged();
     void on_pushButton_4_clicked();
     void on_pushButton_5_clicked();
+    void on_pushButton_6_clicked();
 };
 
 #endif // MAINWINDOW_H

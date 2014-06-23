@@ -494,3 +494,25 @@ void MainWindow::on_pushButton_5_clicked()
 
     }
 }
+
+void MainWindow::on_pushButton_6_clicked()
+{
+    QString text = QInputDialog::getText(this,tr("Ingrese el campo clave"),tr("Buscar"),QLineEdit::Normal,"");
+
+    qDebug() << text;
+
+    vector <datas> info =this->gestor.leerdataBloque();
+
+    vector<datas>::const_iterator it;
+
+    int i = 0;
+    for (it = info.begin(); it != info.end(); ++it) {
+
+        if(datas(*it).tabla == this->act_tabla && this->act_index == i)
+        {
+                 qDebug()<< datas(*it).datos;
+
+        }
+        i++;
+    }
+}

@@ -96,7 +96,7 @@ vector <metaCampos> miGestor::leermetaData()
 
               readStruct.campos.push_back(campo);
 
-               pos+=sizeof(campo);
+              pos+=sizeof(campo);
            }
 
           mistablas.push_back(readStruct);
