@@ -319,7 +319,6 @@ void miGestor::formarArray(char * bytearray,string info,int pos, int largo)
 }
 
 
-
 long miGestor::posPuntero()
 {
     return ftell(archivo);

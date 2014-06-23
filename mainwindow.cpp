@@ -499,20 +499,43 @@ void MainWindow::on_pushButton_6_clicked()
 {
     QString text = QInputDialog::getText(this,tr("Ingrese el campo clave"),tr("Buscar"),QLineEdit::Normal,"");
 
-    qDebug() << text;
+  //  qDebug() << text;
 
     vector <datas> info =this->gestor.leerdataBloque();
 
     vector<datas>::const_iterator it;
 
+    bool mostrar = false;
+     QString dato;
     int i = 0;
     for (it = info.begin(); it != info.end(); ++it) {
 
         if(datas(*it).tabla == this->act_tabla && this->act_index == i)
         {
-                 qDebug()<< datas(*it).datos;
-
+              //   qDebug()<< datas(*it).datos;
+                if(text == datas(*it).datos )
+                {
+                       mostrar = true;
+                       dato = datas(*it).datos;
+                }
         }
         i++;
+        if(mostrar){
+            QMessageBox::information(
+                    this,
+                    tr("ENCONTRADO"),
+                    tr( datas(*it).datos));
+           return;
+        }
     }
-}
+
+    if(!mostrar){
+        QMessageBox::information(
+                this,
+                tr(""),
+                tr("No encontrado") );
+
+    }
+
+
+   }
